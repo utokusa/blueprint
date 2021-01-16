@@ -62,7 +62,7 @@ class App extends Component {
       <View {...styles.container}>
         <View {...styles.content}>
           <Image source={require('./logo.png')} {...styles.logo} />
-          <ParameterSlider
+          {/* <ParameterSlider
             paramId="MainGain"
             onDraw={Slider.drawRotary(sliderTrackColor, sliderFillColor)}
             mapDragGestureToValue={Slider.rotaryGestureMap}
@@ -81,10 +81,9 @@ class App extends Component {
             <Text color={muteTextColor} {...styles.mute_button_text}>
               MUTE
             </Text>
-          </ParameterToggleButton>
-          <TextInput color={muteTextColor} {...styles.mute_button_text}>
-            TEST TEXTINPUT
-          </TextInput>
+          </ParameterToggleButton> */}
+          <TextInput {...styles.text_input} />
+          {/* <TextInput /> */}
         </View>
       </View>
     );
@@ -156,6 +155,15 @@ const styles = {
     fontSize: 20.0,
     lineSpacing: 1.6,
     fontStyle: Text.FontStyleFlags.bold,
+  },
+  text_input: {
+    backgroundColor: 'ff17ffff',
+    color: 'ffffffff',
+    fontSize: 20.0,
+    lineSpacing: 1.6,
+    fontStyle: Text.FontStyleFlags.bold,
+    height: 200,
+    width: 200,
   }
 };
 

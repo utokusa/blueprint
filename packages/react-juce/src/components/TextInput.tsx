@@ -1,7 +1,7 @@
 import React from 'react';
 
 export function TextInput(props: any) {
-    return React.createElement('Text', props, props.children);
+    return React.createElement('TextInput', props, props.children);
 }
 
 TextInput.WordWrap = {
