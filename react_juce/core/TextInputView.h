@@ -22,7 +22,8 @@ namespace blueprint
 class TextInputView : public View
 {
  public:
-  static inline juce::Identifier placeholderProp    = "placeholder";
+  static inline juce::Identifier placeholderProp = "placeholder";
+  static inline juce::Identifier maxlengthProp = "maxlength";
 
   //==============================================================================
 //  TextInputView() = default;
@@ -38,6 +39,9 @@ class TextInputView : public View
     if (name == placeholderProp) {
       placeholderStr = value;
     }
+    if (name == maxlengthProp) {
+      textEditor.setInputRestrictions(value);
+    }
   }
 
 
@@ -50,7 +54,6 @@ class TextInputView : public View
     if (textEditor.getText().isEmpty()) {
       textEditor.setText(placeholderStr);
     }
-    textEditor.paint(g);
   }
 
   //==============================================================================
