@@ -162,7 +162,7 @@ const styles = {
     fontSize: 20.0,
     lineSpacing: 1.6,
     fontStyle: Text.FontStyleFlags.bold,
-    height: 200,
+    height: 20,
     width: 200,
   }
 };

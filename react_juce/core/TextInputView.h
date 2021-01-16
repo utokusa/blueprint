@@ -44,7 +44,7 @@ class TextInputView : public View
     g.fillAll (juce::Colour(255, 0, 0));
     g.setFont (juce::Font (16.0f));
     g.setColour (juce::Colours::white);
-    textEditor.setText("TEST TEXT EDITOR HERE!!");
+//    textEditor.setText("TEST TEXT EDITOR HERE!!");
     textEditor.paint(g);
 //    std::cout << "paint text editor" << std::endl;
   }

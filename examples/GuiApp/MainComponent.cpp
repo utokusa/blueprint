@@ -14,7 +14,7 @@ void MainComponent::paint (juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
 
-    textEditor.setText("Super!");
+//    textEditor.setText("Super!");
     textEditor.paint(g);
 
     g.setFont (juce::Font (16.0f));
