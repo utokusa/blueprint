@@ -27,12 +27,13 @@ class TextInputView : public View
 //  TextInputView() = default;
   TextInputView() {
     addAndMakeVisible(textEditor);
-    textEditor.setBounds(0, 0, 100, 100);
+//    textEditor.setBounds(0, 0, 100, 100);
     std::cout << "construct test text editor" << std::endl;
   }
 
   //==============================================================================
   void setProperty (const juce::Identifier& name, const juce::var& value) override {
+    View::setProperty(name, value);
   }
 
 
@@ -46,6 +47,13 @@ class TextInputView : public View
     textEditor.setText("TEST TEXT EDITOR HERE!!");
     textEditor.paint(g);
 //    std::cout << "paint text editor" << std::endl;
+  }
+
+  //==============================================================================
+  void resized() override
+  {
+    View::resized();
+    textEditor.setBounds(0, 0, getWidth(), getHeight());
   }
 
  private:
