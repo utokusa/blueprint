@@ -82,7 +82,7 @@ class App extends Component {
               MUTE
             </Text>
           </ParameterToggleButton> */}
-          <TextInput {...styles.text_input} />
+          <TextInput placeholder="placeholder text!" {...styles.text_input} />
           {/* <TextInput /> */}
         </View>
       </View>

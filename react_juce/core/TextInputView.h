@@ -22,6 +22,7 @@ namespace blueprint
 class TextInputView : public View
 {
  public:
+  static inline juce::Identifier placeholderProp    = "placeholder";
 
   //==============================================================================
 //  TextInputView() = default;
@@ -34,19 +35,22 @@ class TextInputView : public View
   //==============================================================================
   void setProperty (const juce::Identifier& name, const juce::var& value) override {
     View::setProperty(name, value);
+    if (name == placeholderProp) {
+      placeholderStr = value;
+    }
   }
 
 
   //==============================================================================
   void paint (juce::Graphics& g) override {
-    std::cout << "paint text editor" << std::endl;
     View::paint(g);
     g.fillAll (juce::Colour(255, 0, 0));
     g.setFont (juce::Font (16.0f));
     g.setColour (juce::Colours::white);
-//    textEditor.setText("TEST TEXT EDITOR HERE!!");
+    if (textEditor.getText().isEmpty()) {
+      textEditor.setText(placeholderStr);
+    }
     textEditor.paint(g);
-//    std::cout << "paint text editor" << std::endl;
   }
 
   //==============================================================================
@@ -59,6 +63,7 @@ class TextInputView : public View
  private:
   //==============================================================================
   juce::TextEditor textEditor {"test text editor"};
+  juce::String placeholderStr;
 
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
