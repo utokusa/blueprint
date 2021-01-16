@@ -37,7 +37,7 @@ class TextInputView : public View
   void setProperty (const juce::Identifier& name, const juce::var& value) override {
     View::setProperty(name, value);
     if (name == placeholderProp) {
-      placeholderStr = value;
+      textEditor.setTextToShowWhenEmpty(value, juce::Colours::grey);
     }
     if (name == maxlengthProp) {
       textEditor.setInputRestrictions(value);
@@ -51,9 +51,6 @@ class TextInputView : public View
     g.fillAll (juce::Colour(255, 0, 0));
     g.setFont (juce::Font (16.0f));
     g.setColour (juce::Colours::white);
-    if (textEditor.getText().isEmpty()) {
-      textEditor.setText(placeholderStr);
-    }
   }
 
   //==============================================================================
@@ -65,8 +62,7 @@ class TextInputView : public View
 
  private:
   //==============================================================================
-  juce::TextEditor textEditor {"test text editor"};
-  juce::String placeholderStr;
+  juce::TextEditor textEditor;
 
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
