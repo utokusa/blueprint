@@ -10,6 +10,7 @@ import {
   Canvas,
   Image,
   Text,
+  TextInput,
   View,
   Slider,
 } from 'react-juce';
@@ -54,7 +55,7 @@ class App extends Component {
     const muteBackgroundColor = this.state.muted ? 'ff66FDCF' : 'ff17191f';
     const muteTextColor = this.state.muted ? 'ff17191f' : 'ff66FDCF';
 
-    const sliderFillColor  = 'ff66FDCF';
+    const sliderFillColor = 'ff66FDCF';
     const sliderTrackColor = 'ff626262';
 
     return (
@@ -81,6 +82,9 @@ class App extends Component {
               MUTE
             </Text>
           </ParameterToggleButton>
+          <TextInput color={muteTextColor} {...styles.mute_button_text}>
+            TEST TEXTINPUT
+          </TextInput>
         </View>
       </View>
     );

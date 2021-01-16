@@ -10,6 +10,8 @@
 .cache/
 
 build
+cmake-build-debug
+cmake-build-release
 examples/TestRunner/Builds
 examples/**/build
 
