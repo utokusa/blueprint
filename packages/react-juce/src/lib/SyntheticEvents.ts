@@ -1,9 +1,9 @@
 import { Instance } from "./BlueprintBackend";
 
 export class SyntheticEvent {
-  public  bubbles: boolean;
-  public  defaultPrevented: boolean;
-  public  target: Instance;
+  public bubbles: boolean;
+  public defaultPrevented: boolean;
+  public target: Instance;
   private _internal: any;
 
   constructor(props: any) {
@@ -67,6 +67,16 @@ export class SyntheticInputEvent extends SyntheticEvent {
   }
 }
 
+export class SyntheticChangeEvent extends SyntheticEvent {
+  public value: string;
+
+  constructor(props: any) {
+    super(props);
+
+    this.value = props.value;
+  }
+}
+
 export default {
   isMouseEventHandler(key: string): boolean {
     const k = key.toLowerCase();
@@ -91,6 +101,12 @@ export default {
     const k = key.toLowerCase();
 
     return k === 'oninput';
+  },
+
+  isChangeEventHandler(key: string): boolean {
+    const k = key.toLowerCase();
+
+    return k === 'onchange';
   }
 }
 

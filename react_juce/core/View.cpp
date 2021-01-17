@@ -257,7 +257,6 @@ namespace blueprint
 
     bool View::keyPressed (const juce::KeyPress& key)
     {
-        std::cout << "View::keyPressed()" << std::endl;
         // TODO: "onKeyPressed" not "onKeyPress"?
         dispatchViewEvent("onKeyPress", detail::makeViewEventObject(key, *this));
 
@@ -276,6 +275,9 @@ namespace blueprint
       dispatchViewEvent("onInput", detail::makeViewEventObject({{"value", s}}, *this));
     }
 
+    void View::change (const juce::String& s) {
+      dispatchViewEvent("onChange", detail::makeViewEventObject({{"value", s}}, *this));
+    }
 
     void View::dispatchViewEvent (const juce::String& eventType, const juce::var& e)
     {

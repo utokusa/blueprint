@@ -18,18 +18,45 @@ namespace blueprint
 
 class TextEditorListener : public juce::TextEditor::Listener
 {
-  void textEditorTextChanged (juce::TextEditor &te) override
-  {
+ public:
+  TextEditorListener(View *parent) :change(false), parent(parent) {}
+
+  void textEditorTextChanged (juce::TextEditor &te) override {
     std::cout << "TextEditorListener::textEditorTextChanged()" << std::endl;
     juce::TextEditor::Listener::textEditorTextChanged(te);
+    change = true;
   }
+
+  void textEditorReturnKeyPressed (juce::TextEditor &te) override {
+    invokeChangeIfNeeded(te);
+  }
+
+  // NOTE: javascript's change event is not invoked when Esc is pressed.
+  void textEditorEscapeKeyPressed (juce::TextEditor &te) override {
+    invokeChangeIfNeeded(te);
+  }
+
+  void textEditorFocusLost (juce::TextEditor &te) override {
+    invokeChangeIfNeeded(te);
+  }
+
+ private:
+  void invokeChangeIfNeeded(juce::TextEditor &te) {
+    if (change) {
+      parent->change(te.getText());
+      change = false;
+    }
+  }
+  bool change;
+  View *parent;
+
 };
 
 class TextEditorWrapper : public juce::TextEditor
 {
 public:
   TextEditorWrapper(View *parent) : parent(parent) {
-    addListener(new TextEditorListener);
+    addListener(new TextEditorListener(parent));
   }
 
   void insertTextAtCaret (const juce::String &textToInsert) override

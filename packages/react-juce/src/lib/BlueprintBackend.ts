@@ -5,7 +5,8 @@ import SyntheticEvents,
 {
   SyntheticMouseEvent,
   SyntheticKeyboardEvent,
-  SyntheticInputEvent
+  SyntheticInputEvent,
+  SyntheticChangeEvent
 } from './SyntheticEvents'
 import { macroPropertyGetters } from './MacroProperties';
 
@@ -239,6 +240,8 @@ NativeMethods.dispatchViewEvent = function dispatchEvent(viewId: string, eventTy
       event = new SyntheticKeyboardEvent(event);
     else if (SyntheticEvents.isInputEventHandler(eventType))
       event = new SyntheticInputEvent(event);
+    else if (SyntheticEvents.isChangeEventHandler(eventType))
+      event = new SyntheticChangeEvent(event);
 
     // If mouseDown event we store the target viewId as the last view
     // to recieve a mouseDown for "onClick" book-keeping.

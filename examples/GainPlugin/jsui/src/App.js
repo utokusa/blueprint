@@ -33,7 +33,6 @@ class App extends Component {
     console.log("construct App...");
     super(props);
     this._onMuteToggled = this._onMuteToggled.bind(this);
-    this._onKeyPressed = this._onKeyPressed.bind(this);
 
     this.state = {
       muted: false
@@ -44,10 +43,6 @@ class App extends Component {
     this.setState({
       muted: toggled
     });
-  }
-
-  _onKeyPressed(keyCode, key) {
-    console.log("App.js _onKeyPressed " + key);
   }
 
   render() {
@@ -81,7 +76,7 @@ class App extends Component {
             placeholder="init"
             maxlength={20}
             onInput={(value) => console.log(`App.js onInput: ${value}`)}
-            onChange={this._onKeyPressed}
+            onChange={(value) => console.log(`App.js onChange: ${value}`)}
             {...styles.text_input}
           />
         </View>
