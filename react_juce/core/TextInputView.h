@@ -15,14 +15,15 @@
 namespace blueprint
 {
 
-
-class TextEditorListener : public juce::TextEditor::Listener
+class TextInput : public juce::TextEditor, juce::TextEditor::Listener
 {
- public:
-  TextEditorListener(View *parent) :change(false), parent(parent) {}
+public:
+  TextInput(View *parent) : parent(parent), change(false) {
+    addListener(this);
+  }
 
   void textEditorTextChanged (juce::TextEditor &te) override {
-    juce::TextEditor::Listener::textEditorTextChanged(te);
+    parent->input(getText());
     change = true;
   }
 
@@ -39,33 +40,16 @@ class TextEditorListener : public juce::TextEditor::Listener
     invokeChangeIfNeeded(te);
   }
 
- private:
+private:
   void invokeChangeIfNeeded(juce::TextEditor &te) {
     if (change) {
       parent->change(te.getText());
       change = false;
     }
   }
+
+  View *parent;
   bool change;
-  View *parent;
-
-};
-
-class TextInput : public juce::TextEditor
-{
-public:
-  TextInput(View *parent) : parent(parent) {
-    addListener(new TextEditorListener(parent));
-  }
-
-  void insertTextAtCaret (const juce::String &textToInsert) override
-  {
-    juce::TextEditor::insertTextAtCaret(textToInsert);
-    parent->input(getText());
-  }
-
-private:
-  View *parent;
 };
 
 //==============================================================================
