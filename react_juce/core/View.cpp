@@ -272,6 +272,11 @@ namespace blueprint
         return true;
     }
 
+    void View::input (const juce::String& s) {
+      dispatchViewEvent("onInput", detail::makeViewEventObject({{"value", s}}, *this));
+    }
+
+
     void View::dispatchViewEvent (const juce::String& eventType, const juce::var& e)
     {
         JUCE_ASSERT_MESSAGE_THREAD

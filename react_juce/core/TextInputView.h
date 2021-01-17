@@ -36,6 +36,7 @@ public:
   {
     std::cout << "MyTextEditor::insertTextAtCaret(): " << textToInsert << std::endl;
     juce::TextEditor::insertTextAtCaret(textToInsert);
+    parent->input(getText());
   }
 
   bool keyPressed(const juce::KeyPress &key) override {

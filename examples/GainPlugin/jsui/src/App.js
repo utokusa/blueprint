@@ -80,7 +80,7 @@ class App extends Component {
           <TextInput
             placeholder="init"
             maxlength={20}
-            // onChange={(keyCode, key) => console.log("TextInput value changed: " + keyCode)}
+            onInput={(value) => console.log(`App.js onInput: ${value}`)}
             onChange={this._onKeyPressed}
             {...styles.text_input}
           />
