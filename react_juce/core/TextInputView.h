@@ -16,16 +16,34 @@ namespace blueprint
 {
 
 
+class TextEditorListener : public juce::TextEditor::Listener
+{
+  void textEditorTextChanged (juce::TextEditor &te) override
+  {
+    std::cout << "TextEditorListener::textEditorTextChanged()" << std::endl;
+    juce::TextEditor::Listener::textEditorTextChanged(te);
+  }
+};
+
 class TextEditorWrapper : public juce::TextEditor
 {
 public:
   TextEditorWrapper(View *parent) : parent(parent) {
+    addListener(new TextEditorListener);
   }
+
+  void insertTextAtCaret (const juce::String &textToInsert) override
+  {
+    std::cout << "MyTextEditor::insertTextAtCaret(): " << textToInsert << std::endl;
+    juce::TextEditor::insertTextAtCaret(textToInsert);
+  }
+
   bool keyPressed(const juce::KeyPress &key) override {
     std::cout << "MyTextEditor::keyPressed()" << std::endl;
     juce::TextEditor::keyPressed(key);
 //    parent->keyPressed(key);
   }
+
   void mouseDown(const juce::MouseEvent &e) override {
     std::cout << "MyTextEditor::mouseDown()" << std::endl;
     juce::TextEditor::mouseDown(e);

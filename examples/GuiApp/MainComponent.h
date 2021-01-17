@@ -6,11 +6,20 @@
 // you could `#include <JuceHeader.h>` here instead, to make all your module headers visible.
 #include <juce_gui_extra/juce_gui_extra.h>
 
+ class TextEditorListener : public juce::TextEditor::Listener
+ {
+  void textEditorTextChanged (juce::TextEditor &te) override
+  {
+    std::cout << "TextEditorListener::textEditorTextChanged()" << std::endl;
+  }
+ };
+
  class MyTextEditor :public juce::TextEditor
  {
   public:
    MyTextEditor() {
      setWantsKeyboardFocus(true);
+     addListener(new TextEditorListener);
    }
    bool keyPressed	(const juce::KeyPress &k) override {
      std::cout << "key pressed" << std::endl;
