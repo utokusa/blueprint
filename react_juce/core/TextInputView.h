@@ -60,6 +60,7 @@ class TextInputView : public View
  public:
   static inline juce::Identifier placeholderProp = "placeholder";
   static inline juce::Identifier maxlengthProp = "maxlength";
+  static inline juce::Identifier readonly = "readonly";
 
   //==============================================================================
 //  TextInputView() = default;
@@ -77,6 +78,9 @@ class TextInputView : public View
     }
     if (name == maxlengthProp) {
       textInput.setInputRestrictions(value);
+    }
+    if (name == readonly) {
+      textInput.setReadOnly(value);
     }
   }
 

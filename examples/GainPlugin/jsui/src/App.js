@@ -77,6 +77,7 @@ class App extends Component {
             maxlength={20}
             onInput={(value) => console.log(`App.js onInput: ${value}`)}
             onChange={(value) => console.log(`App.js onChange: ${value}`)}
+            // readonly
             {...styles.text_input}
           />
         </View>

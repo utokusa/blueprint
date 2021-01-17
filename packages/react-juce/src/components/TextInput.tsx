@@ -4,6 +4,7 @@ import { SyntheticInputEvent, SyntheticChangeEvent } from '../lib/SyntheticEvent
 export interface TextInputProps {
   placeholder?: string
   maxlength?: number
+  readonly?: boolean
   onChange?: (value: string) => void
   onInput?: (value: string) => void
 }
