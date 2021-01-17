@@ -15,6 +15,26 @@
 namespace blueprint
 {
 
+
+class TextEditorWrapper : public juce::TextEditor
+{
+public:
+  TextEditorWrapper(View *parent) : parent(parent) {
+  }
+  bool keyPressed(const juce::KeyPress &key) override {
+    std::cout << "MyTextEditor::keyPressed()" << std::endl;
+    juce::TextEditor::keyPressed(key);
+//    parent->keyPressed(key);
+  }
+  void mouseDown(const juce::MouseEvent &e) override {
+    std::cout << "MyTextEditor::mouseDown()" << std::endl;
+    juce::TextEditor::mouseDown(e);
+    parent->mouseDown(e);
+  }
+private:
+  View *parent;
+};
+
 //==============================================================================
 /** The TextView class is a core container abstraction for declaring text components
     within Blueprint's layout system.
@@ -27,7 +47,9 @@ class TextInputView : public View
 
   //==============================================================================
 //  TextInputView() = default;
-  TextInputView() {
+  TextInputView()
+  : textEditor(this)
+  {
     addAndMakeVisible(textEditor);
 //    textEditor.setBounds(0, 0, 100, 100);
     std::cout << "construct test text editor" << std::endl;
@@ -62,8 +84,8 @@ class TextInputView : public View
 
  private:
   //==============================================================================
-  juce::TextEditor textEditor;
-
+  TextEditorWrapper textEditor;
+//  juce::TextEditor textEditor;
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
 };

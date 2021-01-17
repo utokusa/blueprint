@@ -30,8 +30,10 @@ function animatedDraw(ctx) {
 
 class App extends Component {
   constructor(props) {
+    console.log("construct App...");
     super(props);
     this._onMuteToggled = this._onMuteToggled.bind(this);
+    this._onKeyPressed = this._onKeyPressed.bind(this);
 
     this.state = {
       muted: false
@@ -42,6 +44,10 @@ class App extends Component {
     this.setState({
       muted: toggled
     });
+  }
+
+  _onKeyPressed(keyCode, key) {
+    console.log("App.js _onKeyPressed " + key);
   }
 
   render() {
@@ -62,28 +68,22 @@ class App extends Component {
       <View {...styles.container}>
         <View {...styles.content}>
           <Image source={require('./logo.png')} {...styles.logo} />
-          {/* <ParameterSlider
+          <ParameterSlider
             paramId="MainGain"
             onDraw={Slider.drawRotary(sliderTrackColor, sliderFillColor)}
+            {...styles.text_input}
             mapDragGestureToValue={Slider.rotaryGestureMap}
             {...styles.knob}
           >
             <Label paramId="MainGain" {...styles.label} />
           </ParameterSlider>
-          <Meter {...styles.meter} />
-          <Canvas {...styles.canvas} animate={true} onDraw={animatedDraw} />
-          <ParameterToggleButton
-            paramId="MainMute"
-            onToggled={this._onMuteToggled}
-            background-color={muteBackgroundColor}
-            {...styles.mute_button}
-          >
-            <Text color={muteTextColor} {...styles.mute_button_text}>
-              MUTE
-            </Text>
-          </ParameterToggleButton> */}
-          <TextInput placeholder="init" maxlength={5} {...styles.text_input} />
-          {/* <TextInput /> */}
+          <TextInput
+            placeholder="init"
+            maxlength={20}
+            // onChange={(keyCode, key) => console.log("TextInput value changed: " + keyCode)}
+            onChange={this._onKeyPressed}
+            {...styles.text_input}
+          />
         </View>
       </View>
     );
@@ -162,7 +162,7 @@ const styles = {
     fontSize: 20.0,
     lineSpacing: 1.6,
     fontStyle: Text.FontStyleFlags.bold,
-    height: 20,
+    height: 50,
     width: 200,
   }
 };

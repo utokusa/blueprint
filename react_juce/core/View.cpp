@@ -225,6 +225,7 @@ namespace blueprint
 
     void View::mouseDown (const juce::MouseEvent& e)
     {
+        std::cout << "View::mouseDown()" << std::endl;
         dispatchViewEvent("onMouseDown", detail::makeViewEventObject(e, *this));
     }
 
@@ -256,6 +257,8 @@ namespace blueprint
 
     bool View::keyPressed (const juce::KeyPress& key)
     {
+        std::cout << "View::keyPressed()" << std::endl;
+        // TODO: "onKeyPressed" not "onKeyPress"?
         dispatchViewEvent("onKeyPress", detail::makeViewEventObject(key, *this));
 
         // We always inform the underlying juce::Component that we've consumed the event,
