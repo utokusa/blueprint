@@ -15,15 +15,14 @@
 namespace blueprint
 {
 
-class TextInput : public juce::TextEditor, juce::TextEditor::Listener
+class TextInputListener : public juce::TextEditor::Listener
 {
 public:
-  TextInput(View *parent) : parent(parent), change(false) {
-    addListener(this);
+  TextInputListener(View *parent) : parent(parent), change(false) {
   }
 
   void textEditorTextChanged (juce::TextEditor &te) override {
-    parent->input(getText());
+    parent->input(te.getText());
     change = true;
   }
 
@@ -53,8 +52,8 @@ private:
 };
 
 //==============================================================================
-/** The TextView class is a core container abstraction for declaring text components
-    within Blueprint's layout system.
+/** The TextInputView class
+ *  TODO: comment
  */
 class TextInputView : public View
 {
@@ -65,8 +64,9 @@ class TextInputView : public View
   //==============================================================================
 //  TextInputView() = default;
   TextInputView()
-  : textInput(this) {
+  : textInput() {
     addAndMakeVisible(textInput);
+    textInput.addListener(new TextInputListener(this));
   }
 
   //==============================================================================
@@ -98,7 +98,7 @@ class TextInputView : public View
 
  private:
   //==============================================================================
-  TextInput textInput;
+  juce::TextEditor textInput;
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
 };
