@@ -51,10 +51,10 @@ class TextEditorListener : public juce::TextEditor::Listener
 
 };
 
-class TextEditorWrapper : public juce::TextEditor
+class TextInput : public juce::TextEditor
 {
 public:
-  TextEditorWrapper(View *parent) : parent(parent) {
+  TextInput(View *parent) : parent(parent) {
     addListener(new TextEditorListener(parent));
   }
 
@@ -81,19 +81,18 @@ class TextInputView : public View
   //==============================================================================
 //  TextInputView() = default;
   TextInputView()
-  : textEditor(this)
-  {
-    addAndMakeVisible(textEditor);
+  : textInput(this) {
+    addAndMakeVisible(textInput);
   }
 
   //==============================================================================
   void setProperty (const juce::Identifier& name, const juce::var& value) override {
     View::setProperty(name, value);
     if (name == placeholderProp) {
-      textEditor.setTextToShowWhenEmpty(value, juce::Colours::grey);
+      textInput.setTextToShowWhenEmpty(value, juce::Colours::grey);
     }
     if (name == maxlengthProp) {
-      textEditor.setInputRestrictions(value);
+      textInput.setInputRestrictions(value);
     }
   }
 
@@ -110,13 +109,12 @@ class TextInputView : public View
   void resized() override
   {
     View::resized();
-    textEditor.setBounds(0, 0, getWidth(), getHeight());
+    textInput.setBounds(0, 0, getWidth(), getHeight());
   }
 
  private:
   //==============================================================================
-  TextEditorWrapper textEditor;
-//  juce::TextEditor textEditor;
+  TextInput textInput;
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
 };
