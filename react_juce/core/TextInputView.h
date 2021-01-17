@@ -22,7 +22,6 @@ class TextEditorListener : public juce::TextEditor::Listener
   TextEditorListener(View *parent) :change(false), parent(parent) {}
 
   void textEditorTextChanged (juce::TextEditor &te) override {
-    std::cout << "TextEditorListener::textEditorTextChanged()" << std::endl;
     juce::TextEditor::Listener::textEditorTextChanged(te);
     change = true;
   }
@@ -61,22 +60,10 @@ public:
 
   void insertTextAtCaret (const juce::String &textToInsert) override
   {
-    std::cout << "MyTextEditor::insertTextAtCaret(): " << textToInsert << std::endl;
     juce::TextEditor::insertTextAtCaret(textToInsert);
     parent->input(getText());
   }
 
-  bool keyPressed(const juce::KeyPress &key) override {
-    std::cout << "MyTextEditor::keyPressed()" << std::endl;
-    juce::TextEditor::keyPressed(key);
-//    parent->keyPressed(key);
-  }
-
-  void mouseDown(const juce::MouseEvent &e) override {
-    std::cout << "MyTextEditor::mouseDown()" << std::endl;
-    juce::TextEditor::mouseDown(e);
-    parent->mouseDown(e);
-  }
 private:
   View *parent;
 };
@@ -97,8 +84,6 @@ class TextInputView : public View
   : textEditor(this)
   {
     addAndMakeVisible(textEditor);
-//    textEditor.setBounds(0, 0, 100, 100);
-    std::cout << "construct test text editor" << std::endl;
   }
 
   //==============================================================================

@@ -236,7 +236,6 @@ export class Slider extends Component<PropsWithChildren<SliderProps | any>, Slid
   }
 
   _onMouseDown(e: SyntheticMouseEvent) {
-    console.log("on mouse down (slider)");
     this._valueAtDragStart = this.props.hasOwnProperty('value') ? this.props.value : this.state.value;
 
     this._mouseDownX = e.x;
