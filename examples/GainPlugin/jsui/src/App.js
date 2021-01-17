@@ -63,15 +63,6 @@ class App extends Component {
       <View {...styles.container}>
         <View {...styles.content}>
           <Image source={require('./logo.png')} {...styles.logo} />
-          <ParameterSlider
-            paramId="MainGain"
-            onDraw={Slider.drawRotary(sliderTrackColor, sliderFillColor)}
-            {...styles.text_input}
-            mapDragGestureToValue={Slider.rotaryGestureMap}
-            {...styles.knob}
-          >
-            <Label paramId="MainGain" {...styles.label} />
-          </ParameterSlider>
           <TextInput
             placeholder="init"
             maxlength={20}
@@ -80,6 +71,7 @@ class App extends Component {
             // readonly
             {...styles.text_input}
           />
+          <Text {...styles.sameple_text}>Sample Text</Text>
         </View>
       </View>
     );
@@ -152,12 +144,19 @@ const styles = {
     lineSpacing: 1.6,
     fontStyle: Text.FontStyleFlags.bold,
   },
-  text_input: {
-    backgroundColor: 'ff17ffff',
-    color: 'ffffffff',
+  sameple_text: {
     fontSize: 20.0,
     lineSpacing: 1.6,
+    color: 'ffffffff',
     fontStyle: Text.FontStyleFlags.bold,
+  },
+  text_input: {
+    backgroundColor: 'ff17ffff',
+    color: 'ff66FDCF',
+    fontSize: 30.0,
+    fontFamily: 'Menlo',
+    fontStyle: Text.FontStyleFlags.bold,
+    fontKerning: 0.5,
     height: 50,
     width: 200,
   }

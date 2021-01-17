@@ -62,6 +62,19 @@ class TextInputView : public View
   static inline juce::Identifier maxlengthProp = "maxlength";
   static inline juce::Identifier readonly = "readonly";
 
+  static const inline juce::Identifier colorProp         = "color";
+
+  static const inline juce::Identifier fontSizeProp      = "font-size";
+  static const inline juce::Identifier fontStyleProp     = "font-style";
+  static const inline juce::Identifier fontFamilyProp    = "font-family";
+
+  static const inline juce::Identifier justificationProp = "justification";
+//  static const inline juce::Identifier kerningFactorProp = "kerning-factor";
+// TODO: "kerning-factor"? Check TextView.h's kerningFactorProp.
+  static const inline juce::Identifier fontKerningProp = "font-kerning";
+//  static const inline juce::Identifier lineSpacingProp   = "line-spacing";
+//  static const inline juce::Identifier wordWrapProp      = "word-wrap";
+
   //==============================================================================
 //  TextInputView() = default;
   TextInputView()
@@ -82,14 +95,28 @@ class TextInputView : public View
     if (name == readonly) {
       textInput.setReadOnly(value);
     }
+
+    textInput.applyFontToAllText(getFont());
+
+    juce::String hexColor = props.getWithDefault(colorProp, "ff000000");
+    juce::Colour colour = juce::Colour::fromString(hexColor);
+    textInput.applyColourToAllText(colour);
+
+    int just = props.getWithDefault(justificationProp, 1);
+    textInput.setJustification(just);
+
+    juce::Font::findAllTypefaceNames();
+
+//    textInput.setLineSpacing(props.getWithDefault(lineSpacingProp, 1.0f));
+
+
+
   }
 
 
   //==============================================================================
   void paint (juce::Graphics& g) override {
     View::paint(g);
-    g.fillAll (juce::Colour(255, 0, 0));
-    g.setFont (juce::Font (16.0f));
     g.setColour (juce::Colours::white);
   }
 
@@ -98,6 +125,22 @@ class TextInputView : public View
   {
     View::resized();
     textInput.setBounds(0, 0, getWidth(), getHeight());
+  }
+
+  // TODO: It was copied from TextView.h
+  juce::Font getFont()
+  {
+    float fontHeight = props.getWithDefault(fontSizeProp, 12.0f);
+    int textStyleFlags = props.getWithDefault(fontStyleProp, 0);
+
+    juce::Font f (fontHeight);
+
+    if (props.contains(fontFamilyProp))
+      f = juce::Font (props[fontFamilyProp], fontHeight, textStyleFlags);
+
+    f.setExtraKerningFactor(props.getWithDefault(fontKerningProp, 0.0));
+    std::cout << "f.getExtraKerningFactor()" << f.getExtraKerningFactor() << std::endl;
+    return f;
   }
 
  private:
