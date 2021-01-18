@@ -18,7 +18,8 @@ namespace blueprint
 class TextInputListener : public juce::TextEditor::Listener
 {
 public:
-  TextInputListener(View *parent) : parent(parent), change(false) {
+  TextInputListener(View *parent)
+    : parent(parent), change(false) {
   }
 
   void textEditorTextChanged (juce::TextEditor &te) override {
@@ -38,6 +39,7 @@ public:
   void textEditorFocusLost (juce::TextEditor &te) override {
     invokeChangeIfNeeded(te);
   }
+
 
 private:
   void invokeChangeIfNeeded(juce::TextEditor &te) {
@@ -59,6 +61,7 @@ class TextInputView : public View
 {
  public:
   static inline juce::Identifier placeholderProp = "placeholder";
+  static inline juce::Identifier placeholderColorProp = "placeholderColor";
   static inline juce::Identifier maxlengthProp = "maxlength";
   static inline juce::Identifier readonly = "readonly";
 
@@ -78,7 +81,7 @@ class TextInputView : public View
   //==============================================================================
 //  TextInputView() = default;
   TextInputView()
-  : textInput() {
+  : textInput(), placeholderText(), placeholderColour(juce::Colours::black) {
     addAndMakeVisible(textInput);
     textInput.addListener(new TextInputListener(this));
   }
@@ -86,8 +89,13 @@ class TextInputView : public View
   //==============================================================================
   void setProperty (const juce::Identifier& name, const juce::var& value) override {
     View::setProperty(name, value);
-    if (name == placeholderProp) {
-      textInput.setTextToShowWhenEmpty(value, juce::Colours::grey);
+    if ( name == placeholderProp) {
+      setPlaceholderText(value);
+    }
+    if ( name == placeholderColorProp && value != "undefined") {
+      juce::String hexColor = value;
+      juce::Colour colour = juce::Colour::fromString(hexColor);
+      setPlaceholderColour(colour);
     }
     if (name == maxlengthProp) {
       textInput.setInputRestrictions(value);
@@ -139,13 +147,22 @@ class TextInputView : public View
       f = juce::Font (props[fontFamilyProp], fontHeight, textStyleFlags);
 
     f.setExtraKerningFactor(props.getWithDefault(fontKerningProp, 0.0));
-    std::cout << "f.getExtraKerningFactor()" << f.getExtraKerningFactor() << std::endl;
     return f;
   }
 
  private:
+  void setPlaceholderText(const juce::String &text) {
+    placeholderText = text;
+    textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
+  }
+  void setPlaceholderColour(const juce::Colour &colourToUse) {
+    placeholderColour = colourToUse;
+    textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
+  }
   //==============================================================================
   juce::TextEditor textInput;
+  juce::String placeholderText;
+  juce::Colour placeholderColour;
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
 };

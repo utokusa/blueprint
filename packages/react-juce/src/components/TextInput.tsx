@@ -3,6 +3,7 @@ import { SyntheticInputEvent, SyntheticChangeEvent } from '../lib/SyntheticEvent
 
 export interface TextInputProps {
   placeholder?: string
+  placeholderColor?: string
   maxlength?: number
   readonly?: boolean
   onChange?: (value: string) => void
@@ -18,6 +19,8 @@ export class TextInput extends Component<PropsWithChildren<TextInputProps | any>
 
     this._onChange = this._onChange.bind(this);
     this._onInput = this._onInput.bind(this);
+
+    console.log(props.placeholderColor);
 
     this.state = {
     };

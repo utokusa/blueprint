@@ -66,6 +66,7 @@ class App extends Component {
           <TextInput
             placeholder="init"
             maxlength={20}
+            placeholderColor='ffaaaaaa'
             onInput={(value) => console.log(`App.js onInput: ${value}`)}
             onChange={(value) => console.log(`App.js onChange: ${value}`)}
             // readonly
