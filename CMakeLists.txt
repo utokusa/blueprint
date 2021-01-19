@@ -13,4 +13,3 @@ juce_add_module(react_juce)
 # If you want to create new projects, you can init them in the examples folder
 # and add them here with the add_subdirectory command
 add_subdirectory(examples/GainPlugin)
-add_subdirectory(examples/GuiApp)
