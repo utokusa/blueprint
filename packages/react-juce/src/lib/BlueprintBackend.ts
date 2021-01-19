@@ -2,12 +2,10 @@ import { all as allCssProps } from 'known-css-properties';
 import camelCase from 'camelcase';
 import NativeMethods from './NativeMethods';
 import SyntheticEvents,
-{
-  SyntheticMouseEvent,
-  SyntheticKeyboardEvent,
-  SyntheticInputEvent,
-  SyntheticChangeEvent
-} from './SyntheticEvents'
+       { SyntheticMouseEvent,
+         SyntheticKeyboardEvent,
+         SyntheticInputEvent,
+         SyntheticChangeEvent } from './SyntheticEvents';
 import { macroPropertyGetters } from './MacroProperties';
 
 //TODO: Keep this union or introduce a common base class ViewInstanceBase?

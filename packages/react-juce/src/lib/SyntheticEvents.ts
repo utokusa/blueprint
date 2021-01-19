@@ -1,9 +1,9 @@
 import { Instance } from "./BlueprintBackend";
 
 export class SyntheticEvent {
-  public bubbles: boolean;
-  public defaultPrevented: boolean;
-  public target: Instance;
+  public  bubbles: boolean;
+  public  defaultPrevented: boolean;
+  public  target: Instance;
   private _internal: any;
 
   constructor(props: any) {

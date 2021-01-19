@@ -1,45 +1,45 @@
-import React, { Component, PropsWithChildren } from 'react';
+import React, {Component, PropsWithChildren} from 'react';
 import invariant from 'invariant';
 
-import { Canvas } from './Canvas';
-import { View } from './View';
-import { SyntheticMouseEvent } from '../lib/SyntheticEvents';
+import {Canvas} from './Canvas';
+import {View} from './View';
+import {SyntheticMouseEvent} from '../lib/SyntheticEvents';
 
 // Some simple helpers for slider drag gesture -> value mapping
 const _linearHorizontalGestureMap = (mouseDownX: number,
-  mouseDownY: number,
-  sensitivity: number,
-  valueAtDragStart: number,
-  dragEvent: SyntheticMouseEvent): number => {
+                                     mouseDownY: number,
+                                     sensitivity: number,
+                                     valueAtDragStart: number,
+                                     dragEvent: SyntheticMouseEvent): number => {
   const dx = dragEvent.x - mouseDownX;
   return Math.max(0.0, Math.min(1.0, valueAtDragStart + dx * sensitivity));
 }
 
 const _linearVerticalGestureMap = (mouseDownX: number,
-  mouseDownY: number,
-  sensitivity: number,
-  valueAtDragStart: number,
-  dragEvent: SyntheticMouseEvent): number => {
+                                   mouseDownY: number,
+                                   sensitivity: number,
+                                   valueAtDragStart: number,
+                                   dragEvent: SyntheticMouseEvent): number => {
   const dy = dragEvent.y - mouseDownY;
   return Math.max(0.0, Math.min(1.0, valueAtDragStart - dy * sensitivity));
 }
 
 const _rotaryGestureMap = (mouseDownX: number,
-  mouseDownY: number,
-  sensitivity: number,
-  valueAtDragStart: number,
-  dragEvent: SyntheticMouseEvent): number => {
+                           mouseDownY: number,
+                           sensitivity: number,
+                           valueAtDragStart: number,
+                           dragEvent: SyntheticMouseEvent): number => {
   const dx = dragEvent.x - mouseDownX;
   const dy = mouseDownY - dragEvent.y;
   return Math.max(0.0, Math.min(1.0, valueAtDragStart + (dx + dy) * sensitivity));
 }
 
 const _drawLinearHorizontalSlider = (trackColor: string,
-  fillColor: string) => {
+                                     fillColor: string) => {
   return (ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    value: number): void => {
+          width: number,
+          height: number,
+          value: number): void => {
 
     const lineWidth = 2.0;
 
@@ -61,11 +61,11 @@ const _drawLinearHorizontalSlider = (trackColor: string,
 }
 
 const _drawLinearVerticalSlider = (trackColor: string,
-  fillColor: string) => {
+                                   fillColor: string) => {
   return (ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    value: number): void => {
+          width: number,
+          height: number,
+          value: number): void => {
 
     const lineWidth = 2.0;
 
@@ -88,13 +88,13 @@ const _drawLinearVerticalSlider = (trackColor: string,
 }
 
 function _drawArc(ctx,
-  centerX,
-  centerY,
-  radius,
-  arcSize,
-  startAngle,
-  endAngle,
-  lineWidth) {
+                  centerX,
+                  centerY,
+                  radius,
+                  arcSize,
+                  startAngle,
+                  endAngle,
+                  lineWidth) {
   const deltaX = centerX;
   const deltaY = centerY;
 
@@ -115,11 +115,11 @@ function _drawArc(ctx,
 }
 
 const _drawRotarySlider = (trackColor,
-  fillColor) => {
+                           fillColor) => {
   return (ctx,
-    width,
-    height,
-    value) => {
+          width,
+          height,
+          value) => {
 
     const lineWidth = 3;
     const arcSize = 0.8;
