@@ -15,49 +15,11 @@
 namespace blueprint
 {
 
-class TextInputListener : public juce::TextEditor::Listener
-{
-public:
-  TextInputListener(View *parent)
-    : parent(parent), change(false) {
-  }
-
-  void textEditorTextChanged (juce::TextEditor &te) override {
-    parent->input(te.getText());
-    change = true;
-  }
-
-  void textEditorReturnKeyPressed (juce::TextEditor &te) override {
-    invokeChangeIfNeeded(te);
-  }
-
-  // NOTE: javascript's change event is not invoked when Esc is pressed.
-  void textEditorEscapeKeyPressed (juce::TextEditor &te) override {
-    invokeChangeIfNeeded(te);
-  }
-
-  void textEditorFocusLost (juce::TextEditor &te) override {
-    invokeChangeIfNeeded(te);
-  }
-
-
-private:
-  void invokeChangeIfNeeded(juce::TextEditor &te) {
-    if (change) {
-      parent->change(te.getText());
-      change = false;
-    }
-  }
-
-  View *parent;
-  bool change;
-};
-
 //==============================================================================
 /** The TextInputView class
  *  TODO: comment
  */
-class TextInputView : public View
+class TextInputView : public View, juce::TextEditor::Listener
 {
  public:
   static inline juce::Identifier placeholderProp = "placeholder";
@@ -81,9 +43,9 @@ class TextInputView : public View
   //==============================================================================
 //  TextInputView() = default;
   TextInputView()
-  : textInput(), placeholderText(), placeholderColour(juce::Colours::black) {
+  : textInput(), placeholderText(), placeholderColour(juce::Colours::black), dirty(false) {
     addAndMakeVisible(textInput);
-    textInput.addListener(new TextInputListener(this));
+    textInput.addListener(this);
   }
 
   //==============================================================================
@@ -117,8 +79,6 @@ class TextInputView : public View
 
 //    textInput.setLineSpacing(props.getWithDefault(lineSpacingProp, 1.0f));
 
-
-
   }
 
 
@@ -150,6 +110,26 @@ class TextInputView : public View
     return f;
   }
 
+  void textEditorTextChanged (juce::TextEditor &te) override {
+    input(te.getText());
+    dirty = true;
+  }
+
+  void textEditorReturnKeyPressed (juce::TextEditor &te) override {
+    invokeChangeIfNeeded(te);
+  }
+
+  // NOTE: javascript's change event is not invoked when Esc is pressed.
+  void textEditorEscapeKeyPressed (juce::TextEditor &te) override {
+    invokeChangeIfNeeded(te);
+  }
+
+  void textEditorFocusLost (juce::TextEditor &te) override {
+
+    invokeChangeIfNeeded(te);
+  }
+
+
  private:
   void setPlaceholderText(const juce::String &text) {
     placeholderText = text;
@@ -159,10 +139,18 @@ class TextInputView : public View
     placeholderColour = colourToUse;
     textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
   }
+
+  void invokeChangeIfNeeded(juce::TextEditor &te) {
+    if (dirty) {
+      change(textInput.getText());
+      dirty = false;
+    }
+  }
   //==============================================================================
   juce::TextEditor textInput;
   juce::String placeholderText;
   juce::Colour placeholderColour;
+  bool dirty;
   //==============================================================================
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TextInputView)
 };
