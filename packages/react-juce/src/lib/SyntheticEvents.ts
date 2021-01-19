@@ -57,26 +57,6 @@ export class SyntheticKeyboardEvent extends SyntheticEvent {
   }
 }
 
-export class SyntheticInputEvent extends SyntheticEvent {
-  public value: string;
-
-  constructor(props: any) {
-    super(props);
-
-    this.value = props.value;
-  }
-}
-
-export class SyntheticChangeEvent extends SyntheticEvent {
-  public value: string;
-
-  constructor(props: any) {
-    super(props);
-
-    this.value = props.value;
-  }
-}
-
 export default {
   isMouseEventHandler(key: string): boolean {
     const k = key.toLowerCase();
@@ -95,18 +75,6 @@ export default {
     return k === 'onkeydown' ||
       k == 'onkeyup' ||
       k == 'onkeypress';
-  },
-
-  isInputEventHandler(key: string): boolean {
-    const k = key.toLowerCase();
-
-    return k === 'oninput';
-  },
-
-  isChangeEventHandler(key: string): boolean {
-    const k = key.toLowerCase();
-
-    return k === 'onchange';
   }
 }
 

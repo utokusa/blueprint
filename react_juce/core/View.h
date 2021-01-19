@@ -96,11 +96,6 @@ namespace blueprint
         bool keyPressed (const juce::KeyPress& e) override;
 
         //==============================================================================
-        void input (const juce::String& s);
-
-        void change (const juce::String& s);
-
-        //==============================================================================
         /** Invokes, if exists, the respective view event handler. */
         void dispatchViewEvent (const juce::String& eventType, const juce::var& e);
 

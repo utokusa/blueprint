@@ -1,5 +1,12 @@
 import React, { Component, PropsWithChildren } from 'react';
-import { SyntheticInputEvent, SyntheticChangeEvent } from '../lib/SyntheticEvents';
+
+export interface InputEvent {
+  value: string
+}
+
+export interface ChangeEvent {
+  value: string
+}
 
 export interface TextInputProps {
   placeholder?: string
@@ -26,18 +33,18 @@ export class TextInput extends Component<PropsWithChildren<TextInputProps | any>
     };
   }
 
-  _onInput(e: SyntheticInputEvent) {
+  _onInput(e: InputEvent) {
     this.props.onInput(e.value);
   }
 
-  _onChange(e: SyntheticChangeEvent) {
+  _onChange(e: ChangeEvent) {
     this.props.onChange(e.value);
   }
 
   render() {
     return React.createElement('TextInput', Object.assign({}, this.props, {
-      onChange: (e: SyntheticChangeEvent) => { this._onChange(e) },
-      onInput: (e: SyntheticInputEvent) => { this._onInput(e) }
+      onChange: (e: ChangeEvent) => { this._onChange(e) },
+      onInput: (e: InputEvent) => { this._onInput(e) }
     }), this.props.children);
   }
 };

@@ -3,9 +3,7 @@ import camelCase from 'camelcase';
 import NativeMethods from './NativeMethods';
 import SyntheticEvents,
        { SyntheticMouseEvent,
-         SyntheticKeyboardEvent,
-         SyntheticInputEvent,
-         SyntheticChangeEvent } from './SyntheticEvents';
+         SyntheticKeyboardEvent } from './SyntheticEvents'
 import { macroPropertyGetters } from './MacroProperties';
 
 //TODO: Keep this union or introduce a common base class ViewInstanceBase?
@@ -236,10 +234,6 @@ NativeMethods.dispatchViewEvent = function dispatchEvent(viewId: string, eventTy
       event = new SyntheticMouseEvent(event);
     else if (SyntheticEvents.isKeyboardEventHandler(eventType))
       event = new SyntheticKeyboardEvent(event);
-    else if (SyntheticEvents.isInputEventHandler(eventType))
-      event = new SyntheticInputEvent(event);
-    else if (SyntheticEvents.isChangeEventHandler(eventType))
-      event = new SyntheticChangeEvent(event);
 
     // If mouseDown event we store the target viewId as the last view
     // to recieve a mouseDown for "onClick" book-keeping.

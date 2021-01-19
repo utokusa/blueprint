@@ -15,6 +15,15 @@
 namespace blueprint
 {
 
+//namespace detail
+//{
+//juce::var makeInputEventObject(juce::String value) {
+//  juce::DynamicObject::Ptr obj = new juce::DynamicObject();
+//  obj->setProperty("value", value);
+//  return obj.get();
+//}
+//}
+
 //==============================================================================
 /** The TextInputView class
  *  TODO: comment
@@ -39,6 +48,9 @@ class TextInputView : public View, juce::TextEditor::Listener
   static const inline juce::Identifier fontKerningProp = "font-kerning";
 //  static const inline juce::Identifier lineSpacingProp   = "line-spacing";
 //  static const inline juce::Identifier wordWrapProp      = "word-wrap";
+
+  static inline juce::Identifier onInputProp            = "onInput";
+  static inline juce::Identifier onChangeProp           = "onChange";
 
   //==============================================================================
 //  TextInputView() = default;
@@ -111,7 +123,12 @@ class TextInputView : public View, juce::TextEditor::Listener
   }
 
   void textEditorTextChanged (juce::TextEditor &te) override {
-    input(te.getText());
+    if (props.contains(onInputProp) && props[onInputProp].isMethod())
+    {
+      std::array<juce::var, 1> args { {makeInputEventObject(te.getText())} };
+      juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
+      std::invoke(props[onInputProp].getNativeFunction(), nfArgs);
+    }
     dirty = true;
   }
 
@@ -142,9 +159,28 @@ class TextInputView : public View, juce::TextEditor::Listener
 
   void invokeChangeIfNeeded(juce::TextEditor &te) {
     if (dirty) {
-      change(textInput.getText());
+      if (props.contains(onChangeProp) && props[onChangeProp].isMethod())
+      {
+        std::array<juce::var, 1> args { {makeChangeEventObject(te.getText())} };
+        juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
+        std::invoke(props[onChangeProp].getNativeFunction(), nfArgs);
+      }
       dirty = false;
     }
+  }
+
+  // TODO: move to `detail`
+  static juce::var makeInputEventObject(juce::String value) {
+    juce::DynamicObject::Ptr obj = new juce::DynamicObject();
+    obj->setProperty("value", value);
+    return obj.get();
+  }
+
+  // TODO: move to `detail`
+  static juce::var makeChangeEventObject(juce::String value) {
+    juce::DynamicObject::Ptr obj = new juce::DynamicObject();
+    obj->setProperty("value", value);
+    return obj.get();
   }
   //==============================================================================
   juce::TextEditor textInput;
