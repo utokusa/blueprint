@@ -1,8 +1,8 @@
 /*
 ==============================================================================
 
-blueprint_TextInputView.h
-Created: 28 Nov 2018 3:27:27pm
+TextInputView.h
+Created: 2021/01/20 22:30:35
 
 ==============================================================================
 */
@@ -14,15 +14,6 @@ Created: 28 Nov 2018 3:27:27pm
 namespace blueprint
 {
 
-    //namespace detail
-    //{
-    //juce::var makeInputEventObject(juce::String value) {
-    //  juce::DynamicObject::Ptr obj = new juce::DynamicObject();
-    //  obj->setProperty("value", value);
-    //  return obj.get();
-    //}
-    //}
-
     //==============================================================================
     /** The TextInputView class
  *  TODO: comment
@@ -30,6 +21,7 @@ namespace blueprint
     class TextInputView : public View, juce::TextEditor::Listener
     {
     public:
+        //==============================================================================
         static inline juce::Identifier placeholderProp = "placeholder";
         static inline juce::Identifier placeholderColorProp = "placeholderColor";
         static inline juce::Identifier maxlengthProp = "maxlength";
@@ -48,149 +40,27 @@ namespace blueprint
         static inline juce::Identifier onChangeProp = "onChange";
 
         //==============================================================================
-        TextInputView()
-            : textInput(), placeholderText(), placeholderColour(juce::Colours::black), dirty(false)
-        {
-            addAndMakeVisible(textInput);
-            textInput.addListener(this);
-        }
+        TextInputView();
 
         //==============================================================================
-        void setProperty(const juce::Identifier &name, const juce::var &value) override
-        {
-            View::setProperty(name, value);
-            if (name == placeholderProp)
-            {
-                setPlaceholderText(value);
-            }
-            if (name == placeholderColorProp && value != "undefined")
-            {
-                juce::String hexColor = value;
-                juce::Colour colour = juce::Colour::fromString(hexColor);
-                setPlaceholderColour(colour);
-            }
-            if (name == maxlengthProp)
-            {
-                textInput.setInputRestrictions(value);
-            }
-            if (name == readonly)
-            {
-                textInput.setReadOnly(value);
-            }
-
-            textInput.applyFontToAllText(getFont());
-
-            juce::String hexColor = props.getWithDefault(colorProp, "ff000000");
-            juce::Colour colour = juce::Colour::fromString(hexColor);
-            textInput.applyColourToAllText(colour);
-
-            int just = props.getWithDefault(justificationProp, 1);
-            textInput.setJustification(just);
-
-            juce::Font::findAllTypefaceNames();
-
-            //    textInput.setLineSpacing(props.getWithDefault(lineSpacingProp, 1.0f));
-        }
+        void setProperty(const juce::Identifier &name, const juce::var &value) override;
 
         //==============================================================================
-        void paint(juce::Graphics &g) override
-        {
-            View::paint(g);
-            g.setColour(juce::Colours::white);
-        }
+        void paint(juce::Graphics &g);
+        void resized() override;
 
         //==============================================================================
-        void resized() override
-        {
-            View::resized();
-            textInput.setBounds(0, 0, getWidth(), getHeight());
-        }
-
-        // TODO: It was copied from TextView.h
-        juce::Font getFont()
-        {
-            float fontHeight = props.getWithDefault(fontSizeProp, 12.0f);
-            int textStyleFlags = props.getWithDefault(fontStyleProp, 0);
-
-            juce::Font f(fontHeight);
-
-            if (props.contains(fontFamilyProp))
-                f = juce::Font(props[fontFamilyProp], fontHeight, textStyleFlags);
-
-            f.setExtraKerningFactor(props.getWithDefault(kerningFactorProp, 0.0));
-            return f;
-        }
-
-        void textEditorTextChanged(juce::TextEditor &te) override
-        {
-            if (props.contains(onInputProp) && props[onInputProp].isMethod())
-            {
-                std::array<juce::var, 1> args{{makeInputEventObject(te.getText())}};
-                juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
-                std::invoke(props[onInputProp].getNativeFunction(), nfArgs);
-            }
-            dirty = true;
-        }
-
-        void textEditorReturnKeyPressed(juce::TextEditor &te) override
-        {
-            invokeChangeIfNeeded(te);
-        }
-
-        // NOTE: javascript's change event is not invoked when Esc is pressed.
-        //       This behavior is react-juce specific.
-        void textEditorEscapeKeyPressed(juce::TextEditor &te) override
-        {
-            invokeChangeIfNeeded(te);
-        }
-
-        void textEditorFocusLost(juce::TextEditor &te) override
-        {
-
-            invokeChangeIfNeeded(te);
-        }
+        void textEditorTextChanged(juce::TextEditor &te);
+        void textEditorReturnKeyPressed(juce::TextEditor &te);
+        void textEditorEscapeKeyPressed(juce::TextEditor &te);
+        void textEditorFocusLost(juce::TextEditor &te);
 
     private:
-        void setPlaceholderText(const juce::String &text)
-        {
-            placeholderText = text;
-            textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
-        }
-        void setPlaceholderColour(const juce::Colour &colourToUse)
-        {
-            placeholderColour = colourToUse;
-            textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
-        }
+        juce::Font getFont();
+        void setPlaceholderText(const juce::String &text);
+        void setPlaceholderColour(const juce::Colour &colourToUse);
+        void invokeChangeIfNeeded(juce::TextEditor &te);
 
-        void invokeChangeIfNeeded(juce::TextEditor &te)
-        {
-            if (dirty)
-            {
-                if (props.contains(onChangeProp) && props[onChangeProp].isMethod())
-                {
-                    std::array<juce::var, 1> args{{makeChangeEventObject(te.getText())}};
-                    juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
-                    std::invoke(props[onChangeProp].getNativeFunction(), nfArgs);
-                }
-                dirty = false;
-            }
-        }
-
-        // TODO: move to `detail`
-        static juce::var makeInputEventObject(const juce::String &value)
-        {
-            juce::DynamicObject::Ptr obj = new juce::DynamicObject();
-            obj->setProperty("value", value);
-            return obj.get();
-        }
-
-        // TODO: move to `detail`
-        static juce::var makeChangeEventObject(const juce::String &value)
-        {
-            juce::DynamicObject::Ptr obj = new juce::DynamicObject();
-            obj->setProperty("value", value);
-            return obj.get();
-        }
         //==============================================================================
         juce::TextEditor textInput;
         juce::String placeholderText;
