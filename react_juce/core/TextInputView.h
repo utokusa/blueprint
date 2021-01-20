@@ -36,11 +36,9 @@ namespace blueprint
         static inline juce::Identifier readonly = "readonly";
 
         static const inline juce::Identifier colorProp = "color";
-
         static const inline juce::Identifier fontSizeProp = "font-size";
         static const inline juce::Identifier fontStyleProp = "font-style";
         static const inline juce::Identifier fontFamilyProp = "font-family";
-
         static const inline juce::Identifier justificationProp = "justification";
         static const inline juce::Identifier kerningFactorProp = "kerning-factor";
         //  static const inline juce::Identifier lineSpacingProp   = "line-spacing";
@@ -50,7 +48,6 @@ namespace blueprint
         static inline juce::Identifier onChangeProp = "onChange";
 
         //==============================================================================
-        //  TextInputView() = default;
         TextInputView()
             : textInput(), placeholderText(), placeholderColour(juce::Colours::black), dirty(false)
         {
@@ -141,6 +138,7 @@ namespace blueprint
         }
 
         // NOTE: javascript's change event is not invoked when Esc is pressed.
+        //       This behavior is react-juce specific.
         void textEditorEscapeKeyPressed(juce::TextEditor &te) override
         {
             invokeChangeIfNeeded(te);
@@ -179,7 +177,7 @@ namespace blueprint
         }
 
         // TODO: move to `detail`
-        static juce::var makeInputEventObject(juce::String value)
+        static juce::var makeInputEventObject(const juce::String &value)
         {
             juce::DynamicObject::Ptr obj = new juce::DynamicObject();
             obj->setProperty("value", value);
@@ -187,7 +185,7 @@ namespace blueprint
         }
 
         // TODO: move to `detail`
-        static juce::var makeChangeEventObject(juce::String value)
+        static juce::var makeChangeEventObject(const juce::String &value)
         {
             juce::DynamicObject::Ptr obj = new juce::DynamicObject();
             obj->setProperty("value", value);
