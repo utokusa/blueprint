@@ -23,7 +23,7 @@ namespace blueprint
     public:
         //==============================================================================
         static inline juce::Identifier placeholderProp = "placeholder";
-        static inline juce::Identifier placeholderColorProp = "placeholderColor";
+        static inline juce::Identifier placeholderColorProp = "placeholder-color";
         static inline juce::Identifier maxlengthProp = "maxlength";
         static inline juce::Identifier readonly = "readonly";
 

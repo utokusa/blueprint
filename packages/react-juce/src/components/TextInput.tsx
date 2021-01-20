@@ -27,8 +27,6 @@ export class TextInput extends Component<PropsWithChildren<TextInputProps | any>
     this._onChange = this._onChange.bind(this);
     this._onInput = this._onInput.bind(this);
 
-    console.log(props.placeholderColor);
-
     this.state = {
     };
   }

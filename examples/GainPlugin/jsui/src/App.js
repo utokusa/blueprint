@@ -66,7 +66,6 @@ class App extends Component {
           <TextInput
             placeholder="init"
             maxlength={20}
-            placeholderColor='ffaaaaaa'
             onInput={(value) => console.log(`App.js onInput: ${value}`)}
             onChange={(value) => console.log(`App.js onChange: ${value}`)}
             // readonly
@@ -159,6 +158,7 @@ const styles = {
     fontFamily: 'Menlo',
     fontStyle: Text.FontStyleFlags.bold,
     'kerning-factor': 0.5,
+    'placeholder-color': 'ffaaaaaa',
     height: 50,
     width: 200,
   }
