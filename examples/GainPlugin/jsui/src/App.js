@@ -150,6 +150,7 @@ const styles = {
     lineSpacing: 1.6,
     color: 'ffffffff',
     fontStyle: Text.FontStyleFlags.bold,
+    'kerning-factor': 0.5,
   },
   text_input: {
     backgroundColor: 'ff17ffff',
@@ -157,7 +158,7 @@ const styles = {
     fontSize: 30.0,
     fontFamily: 'Menlo',
     fontStyle: Text.FontStyleFlags.bold,
-    fontKerning: 0.5,
+    'kerning-factor': 0.5,
     height: 50,
     width: 200,
   }

@@ -42,9 +42,7 @@ namespace blueprint
         static const inline juce::Identifier fontFamilyProp = "font-family";
 
         static const inline juce::Identifier justificationProp = "justification";
-        //  static const inline juce::Identifier kerningFactorProp = "kerning-factor";
-        // TODO: "kerning-factor"? Check TextView.h's kerningFactorProp.
-        static const inline juce::Identifier fontKerningProp = "font-kerning";
+        static const inline juce::Identifier kerningFactorProp = "kerning-factor";
         //  static const inline juce::Identifier lineSpacingProp   = "line-spacing";
         //  static const inline juce::Identifier wordWrapProp      = "word-wrap";
 
@@ -122,7 +120,7 @@ namespace blueprint
             if (props.contains(fontFamilyProp))
                 f = juce::Font(props[fontFamilyProp], fontHeight, textStyleFlags);
 
-            f.setExtraKerningFactor(props.getWithDefault(fontKerningProp, 0.0));
+            f.setExtraKerningFactor(props.getWithDefault(kerningFactorProp, 0.0));
             return f;
         }
 
