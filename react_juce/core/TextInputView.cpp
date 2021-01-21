@@ -42,14 +42,18 @@ namespace blueprint
         {
             setPlaceholderText(value);
         }
-        if (name == placeholderColorProp && value != "undefined")
+        if (name == placeholderColorProp)
         {
+            if (!value.isString())
+                throw std::invalid_argument("Invalid prop value. Prop \'placeholder-color\' must be a color string.");
             juce::String hexColor = value;
             juce::Colour colour = juce::Colour::fromString(hexColor);
             setPlaceholderColour(colour);
         }
         if (name == maxlengthProp)
         {
+            if (!props[maxlengthProp].isDouble())
+              throw std::invalid_argument("Invalid prop value. Prop \'maxlength\' must be a number.");
             textInput.setInputRestrictions(value);
         }
         if (name == readonly)
@@ -65,10 +69,6 @@ namespace blueprint
 
         int just = props.getWithDefault(justificationProp, 1);
         textInput.setJustification(just);
-
-        juce::Font::findAllTypefaceNames();
-
-        //    textInput.setLineSpacing(props.getWithDefault(lineSpacingProp, 1.0f));
     }
 
     void TextInputView::paint(juce::Graphics &g)

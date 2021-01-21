@@ -33,8 +33,6 @@ namespace blueprint
         static const inline juce::Identifier fontFamilyProp = "font-family";
         static const inline juce::Identifier justificationProp = "justification";
         static const inline juce::Identifier kerningFactorProp = "kerning-factor";
-        //  static const inline juce::Identifier lineSpacingProp   = "line-spacing";
-        //  static const inline juce::Identifier wordWrapProp      = "word-wrap";
 
         static inline juce::Identifier onInputProp = "onInput";
         static inline juce::Identifier onChangeProp = "onChange";

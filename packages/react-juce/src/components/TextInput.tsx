@@ -9,12 +9,13 @@ export interface ChangeEvent {
 }
 
 export interface TextInputProps {
-  placeholder?: string
-  placeholderColor?: string
-  maxlength?: number
-  readonly?: boolean
-  onChange?: (e: ChangeEvent) => void
-  onInput?: (e: InputEvent) => void
+  placeholder?: string,
+  'placeholder-color'?: string,
+  maxlength?: number,
+  readonly?: boolean,
+
+  onChange?: (e: ChangeEvent) => void,
+  onInput?: (e: InputEvent) => void,
 }
 
 // //TODO: Remove any once ViewProps typed
