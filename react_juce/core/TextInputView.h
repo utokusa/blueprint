@@ -48,10 +48,10 @@ namespace blueprint
         void resized() override;
 
         //==============================================================================
-        void textEditorTextChanged(juce::TextEditor &te);
-        void textEditorReturnKeyPressed(juce::TextEditor &te);
-        void textEditorEscapeKeyPressed(juce::TextEditor &te);
-        void textEditorFocusLost(juce::TextEditor &te);
+        void textEditorTextChanged(juce::TextEditor &te) override;
+        void textEditorReturnKeyPressed(juce::TextEditor &te) override;
+        void textEditorEscapeKeyPressed(juce::TextEditor &te) override;
+        void textEditorFocusLost(juce::TextEditor &te) override;
 
     private:
         juce::Font getFont();
