@@ -17,16 +17,19 @@ namespace blueprint
     class TextInput : public juce::TextEditor, public juce::TextEditor::Listener
     {
     public:
-        TextInput(const juce::NamedValueSet *props)
-            : props(props),
+        TextInput(const juce::NamedValueSet *_props)
+            :
+              dirty(false),
               controlled(false),
               preventUndoForControlledValue(false),
+              maxLength(INT_MAX),
               placeholderText(),
-              placeholderColour(juce::Colours::black) {}
+              placeholderColour(juce::Colours::black),
+              props(_props) {}
         void insertTextAtCaret(const juce::String &textToInsert) override;
         void setControlled(bool _controlled) { controlled = _controlled; }
         void setControlledValue(const juce::String &value);
-        void setMaxLength(const int maxLen);
+        void setMaxLength(int maxLen);
         void setPlaceholderText(const juce::String &text);
         void setPlaceholderColour(const juce::Colour &colourToUse);
 
@@ -37,6 +40,7 @@ namespace blueprint
         void textEditorFocusLost(juce::TextEditor &te) override;
     private:
         void invokeChangeIfNeeded(juce::TextEditor &te);
+
         bool dirty;
         bool controlled;
         // TODO: comment
@@ -46,7 +50,6 @@ namespace blueprint
         int maxLength;
         juce::String placeholderText;
         juce::Colour placeholderColour;
-
         const juce::NamedValueSet *props;
     };
 

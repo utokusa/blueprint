@@ -34,7 +34,7 @@ namespace blueprint
         setText(value);
     }
 
-    void TextInput::setMaxLength(const int maxLen)
+    void TextInput::setMaxLength(int maxLen)
     {
         maxLength = maxLen;
         setInputRestrictions(maxLen);
