@@ -40,6 +40,18 @@ namespace blueprint
         setInputRestrictions(maxLen);
     }
 
+    void TextInput::setPlaceholderText(const juce::String &text)
+    {
+        placeholderText = text;
+        setTextToShowWhenEmpty(placeholderText, placeholderColour);
+    }
+
+    void TextInput::setPlaceholderColour(const juce::Colour &colourToUse)
+    {
+        placeholderColour = colourToUse;
+        setTextToShowWhenEmpty(placeholderText, placeholderColour);
+    }
+
     void TextInput::insertTextAtCaret(const juce::String &textToInsert)
     {
         juce::String currentValue = getText();
@@ -106,8 +118,6 @@ namespace blueprint
 
     TextInputView::TextInputView()
         : textInput(&props),
-          placeholderText(),
-          placeholderColour(juce::Colours::black),
           dirty(false)
     {
         addAndMakeVisible(textInput);
@@ -126,7 +136,7 @@ namespace blueprint
         }
         if (name == placeholderProp)
         {
-            setPlaceholderText(value);
+            textInput.setPlaceholderText(value);
         }
         if (name == placeholderColorProp)
         {
@@ -134,7 +144,7 @@ namespace blueprint
                 throw std::invalid_argument("Invalid prop value. Prop \'placeholder-color\' must be a color string.");
             juce::String hexColor = value;
             juce::Colour colour = juce::Colour::fromString(hexColor);
-            setPlaceholderColour(colour);
+            textInput.setPlaceholderColour(colour);
         }
         if (name == maxlengthProp)
         {
@@ -182,16 +192,5 @@ namespace blueprint
 
         f.setExtraKerningFactor(props.getWithDefault(kerningFactorProp, 0.0));
         return f;
-    }
-
-    void TextInputView::setPlaceholderText(const juce::String &text)
-    {
-        placeholderText = text;
-        textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
-    }
-    void TextInputView::setPlaceholderColour(const juce::Colour &colourToUse)
-    {
-        placeholderColour = colourToUse;
-        textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
     }
 }

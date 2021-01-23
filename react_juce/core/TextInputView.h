@@ -17,11 +17,18 @@ namespace blueprint
     class TextInput : public juce::TextEditor, public juce::TextEditor::Listener
     {
     public:
-        TextInput(const juce::NamedValueSet *props) : props(props), controlled(false), preventUndoForControlledValue(false) {}
+        TextInput(const juce::NamedValueSet *props)
+            : props(props),
+              controlled(false),
+              preventUndoForControlledValue(false),
+              placeholderText(),
+              placeholderColour(juce::Colours::black) {}
         void insertTextAtCaret(const juce::String &textToInsert) override;
         void setControlled(bool _controlled) { controlled = _controlled; }
         void setControlledValue(const juce::String &value);
         void setMaxLength(const int maxLen);
+        void setPlaceholderText(const juce::String &text);
+        void setPlaceholderColour(const juce::Colour &colourToUse);
 
         //==============================================================================
         void textEditorTextChanged(juce::TextEditor &te) override;
@@ -37,6 +44,8 @@ namespace blueprint
         // We cannot get maxLength from juce::TextEditor.
         // So we save it here.
         int maxLength;
+        juce::String placeholderText;
+        juce::Colour placeholderColour;
 
         const juce::NamedValueSet *props;
     };
@@ -72,22 +81,14 @@ namespace blueprint
         void setProperty(const juce::Identifier &name, const juce::var &value) override;
 
         //==============================================================================
-        void paint(juce::Graphics &g);
+        void paint(juce::Graphics &g) override;
         void resized() override;
-
-
 
     private:
         juce::Font getFont();
-        void setPlaceholderText(const juce::String &text);
-        void setPlaceholderColour(const juce::Colour &colourToUse);
-
 
         //==============================================================================
         TextInput textInput;
-        // TODO: move to TextInput class
-        juce::String placeholderText;
-        juce::Colour placeholderColour;
         bool dirty;
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TextInputView)
