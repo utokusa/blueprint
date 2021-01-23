@@ -55,7 +55,6 @@ namespace blueprint
 
         //==============================================================================
         void textEditorReturnKeyPressed(juce::TextEditor &) override;
-        void textEditorEscapeKeyPressed(juce::TextEditor &) override;
         void textEditorFocusLost(juce::TextEditor &) override;
     private:
         //==============================================================================

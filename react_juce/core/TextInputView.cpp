@@ -87,13 +87,6 @@ namespace blueprint
         invokeChangeEventIfNeeded();
     }
 
-    // Note: JavaScript's change event is not invoked when Esc is pressed.
-    //       This behavior is react-juce specific.
-    void TextInput::textEditorEscapeKeyPressed(juce::TextEditor &)
-    {
-        invokeChangeEventIfNeeded();
-    }
-
     void TextInput::textEditorFocusLost(juce::TextEditor &)
     {
         invokeChangeEventIfNeeded();
