@@ -14,6 +14,11 @@ export interface TextInputProps {
   'placeholder-color'?: string,
   maxlength?: number,
   readonly?: boolean,
+  'outline-color'?: string,
+  'focused-outline-color'?: string,
+  'highlighted-text-color'?: string,
+  'highlighted-color'?: string,
+  'caret-color'?: string,
 
   onChange?: (e: ChangeEvent) => void,
   onInput?: (e: InputEvent) => void,
