@@ -8,6 +8,7 @@ Created: 2021/01/20 22:30:35
 */
 
 #include "TextInputView.h"
+#include "TextView.h"
 
 namespace blueprint
 {
@@ -30,7 +31,7 @@ namespace blueprint
 
     void TextInput::setControlledValue(const juce::String &value)
     {
-        preventUndoForControlledValue = true;
+        insertedAsControlledValue = true;
         setText(value);
     }
 
@@ -62,51 +63,50 @@ namespace blueprint
             return;
         }
 
+        // Invoke JavaScript's `input` event.
         if ((*props).contains(TextInputView::onInputProp) && (*props)[TextInputView::onInputProp].isMethod())
         {
-            std::array<juce::var, 1> args{{detail::makeInputEventObject(getText())}};
+            std::array<juce::var, 1> args{{detail::makeInputEventObject(newValue)}};
             juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
             std::invoke((*props)[TextInputView::onInputProp].getNativeFunction(), nfArgs);
         }
+
         dirty = true;
 
-        if (controlled && !preventUndoForControlledValue)
+        if (controlled && !insertedAsControlledValue)
         {
             undo();
         }
-        preventUndoForControlledValue = false;
+        insertedAsControlledValue = false;
     }
 
     //==============================================================================
-    void TextInput::textEditorTextChanged(juce::TextEditor &)
+
+    void TextInput::textEditorReturnKeyPressed(juce::TextEditor &)
     {
+        invokeChangeEventIfNeeded();
     }
 
-    void TextInput::textEditorReturnKeyPressed(juce::TextEditor &te)
-    {
-        invokeChangeIfNeeded(te);
-    }
-
-    // NOTE: JavaScript's change event is not invoked when Esc is pressed.
+    // Note: JavaScript's change event is not invoked when Esc is pressed.
     //       This behavior is react-juce specific.
-    void TextInput::textEditorEscapeKeyPressed(juce::TextEditor &te)
+    void TextInput::textEditorEscapeKeyPressed(juce::TextEditor &)
     {
-        invokeChangeIfNeeded(te);
+        invokeChangeEventIfNeeded();
     }
 
-    void TextInput::textEditorFocusLost(juce::TextEditor &te)
+    void TextInput::textEditorFocusLost(juce::TextEditor &)
     {
-
-        invokeChangeIfNeeded(te);
+        invokeChangeEventIfNeeded();
     }
 
-    void TextInput::invokeChangeIfNeeded(juce::TextEditor &te)
+    void TextInput::invokeChangeEventIfNeeded()
     {
         if (dirty)
         {
+            // Invoke JavaScript's `change` event.
             if ((*props).contains(TextInputView::onChangeProp) && (*props)[TextInputView::onChangeProp].isMethod())
             {
-                std::array<juce::var, 1> args{{detail::makeChangeEventObject(te.getText())}};
+                std::array<juce::var, 1> args{{detail::makeChangeEventObject(getText())}};
                 juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
                 std::invoke((*props)[TextInputView::onChangeProp].getNativeFunction(), nfArgs);
             }
@@ -136,6 +136,8 @@ namespace blueprint
         }
         if (name == placeholderProp)
         {
+            if (!value.isString())
+                throw std::invalid_argument("Invalid prop value. Prop \'placeholder\' must be a string.");
             textInput.setPlaceholderText(value);
         }
         if (name == placeholderColorProp)
@@ -148,7 +150,7 @@ namespace blueprint
         }
         if (name == maxlengthProp)
         {
-            if (!props[maxlengthProp].isDouble())
+            if (!value.isDouble())
               throw std::invalid_argument("Invalid prop value. Prop \'maxlength\' must be a number.");
             textInput.setMaxLength(value);
         }
@@ -223,18 +225,8 @@ namespace blueprint
         textInput.setBounds(0, 0, getWidth(), getHeight());
     }
 
-    // TODO: It was copied from TextView.h
     juce::Font TextInputView::getFont()
     {
-        float fontHeight = props.getWithDefault(fontSizeProp, 12.0f);
-        int textStyleFlags = props.getWithDefault(fontStyleProp, 0);
-
-        juce::Font f(fontHeight);
-
-        if (props.contains(fontFamilyProp))
-            f = juce::Font(props[fontFamilyProp], fontHeight, textStyleFlags);
-
-        f.setExtraKerningFactor(props.getWithDefault(kerningFactorProp, 0.0));
-        return f;
+        return TextView::getFont(props);
     }
 }

@@ -14,19 +14,37 @@ Created: 2021/01/20 22:30:35
 namespace blueprint
 {
     //==============================================================================
+    /** The TextInput class is an extended juce::TextEditor class for TextInputView
+     * class. There are some features added.
+     *
+     * - Invoke JavaScript's 'input' and 'change' event.
+     *
+     *   Note: React.js has only 'onChange' callback which has same behavior as
+     *   JavaScript's 'onInput' and does not have any callback corresponding to
+     *   original JavaScript's 'onChange'.
+     *   https://stackoverflow.com/questions/38256332/in-react-whats-the-difference-between-onchange-and-oninput
+     *
+     * - Support React's controlled component model.
+     *   https://reactjs.org/docs/uncontrolled-components.html
+     *   If field `controlled` is true,
+     *   only the string value given by `setControlledValue()`
+     *   is shown in the text editor.
+     *
+     * - Allow to set 'placeholder' text and 'placeholder-color' separately.
+     */
     class TextInput : public juce::TextEditor, public juce::TextEditor::Listener
     {
     public:
         //==============================================================================
         explicit TextInput(const juce::NamedValueSet *_props)
             :
-              props(_props),
-              controlled(false),
-              preventUndoForControlledValue(false),
-              dirty(false),
-              maxLength(INT_MAX),
-              placeholderText(),
-              placeholderColour(juce::Colours::black) {}
+            props(_props),
+            controlled(false),
+            insertedAsControlledValue(false),
+            dirty(false),
+            maxLength(INT_MAX),
+            placeholderText(),
+            placeholderColour(juce::Colours::black) {}
 
         void insertTextAtCaret(const juce::String &textToInsert) override;
         void setControlled(bool _controlled) { controlled = _controlled; }
@@ -36,32 +54,28 @@ namespace blueprint
         void setPlaceholderColour(const juce::Colour &colourToUse);
 
         //==============================================================================
-        void textEditorTextChanged(juce::TextEditor &te) override;
-        void textEditorReturnKeyPressed(juce::TextEditor &te) override;
-        void textEditorEscapeKeyPressed(juce::TextEditor &te) override;
-        void textEditorFocusLost(juce::TextEditor &te) override;
+        void textEditorReturnKeyPressed(juce::TextEditor &) override;
+        void textEditorEscapeKeyPressed(juce::TextEditor &) override;
+        void textEditorFocusLost(juce::TextEditor &) override;
     private:
         //==============================================================================
-        void invokeChangeIfNeeded(juce::TextEditor &te);
+        void invokeChangeEventIfNeeded();
 
         //==============================================================================
         const juce::NamedValueSet *props;
         bool controlled;
-        // TODO: comment
-        bool preventUndoForControlledValue;
+        bool insertedAsControlledValue;
 
-        bool dirty;
-        // We cannot get maxLength from juce::TextEditor.
-        // So we save it here.
+        bool dirty; // for `onChange`
         int maxLength;
         juce::String placeholderText;
         juce::Colour placeholderColour;
     };
 
     //==============================================================================
-    /** The TextInputView class
- *  TODO: comment
- */
+    /** The TextInputView class is a core view for text editor
+     * within Blueprint's layout system.
+     */
     class TextInputView : public View
     {
     public:
@@ -69,11 +83,7 @@ namespace blueprint
         static inline juce::Identifier valueProp = "value";
 
         static const inline juce::Identifier colorProp = "color";
-        static const inline juce::Identifier fontSizeProp = "font-size";
-        static const inline juce::Identifier fontStyleProp = "font-style";
-        static const inline juce::Identifier fontFamilyProp = "font-family";
         static const inline juce::Identifier justificationProp = "justification";
-        static const inline juce::Identifier kerningFactorProp = "kerning-factor";
 
         static inline juce::Identifier placeholderProp = "placeholder";
         static inline juce::Identifier placeholderColorProp = "placeholder-color";
