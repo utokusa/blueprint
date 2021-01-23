@@ -117,8 +117,7 @@ namespace blueprint
     //==============================================================================
 
     TextInputView::TextInputView()
-        : textInput(&props),
-          dirty(false)
+        : textInput(&props)
     {
         addAndMakeVisible(textInput);
         textInput.addListener(&textInput);

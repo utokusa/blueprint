@@ -17,15 +17,17 @@ namespace blueprint
     class TextInput : public juce::TextEditor, public juce::TextEditor::Listener
     {
     public:
-        TextInput(const juce::NamedValueSet *_props)
+        //==============================================================================
+        explicit TextInput(const juce::NamedValueSet *_props)
             :
-              dirty(false),
+              props(_props),
               controlled(false),
               preventUndoForControlledValue(false),
+              dirty(false),
               maxLength(INT_MAX),
               placeholderText(),
-              placeholderColour(juce::Colours::black),
-              props(_props) {}
+              placeholderColour(juce::Colours::black) {}
+
         void insertTextAtCaret(const juce::String &textToInsert) override;
         void setControlled(bool _controlled) { controlled = _controlled; }
         void setControlledValue(const juce::String &value);
@@ -39,18 +41,21 @@ namespace blueprint
         void textEditorEscapeKeyPressed(juce::TextEditor &te) override;
         void textEditorFocusLost(juce::TextEditor &te) override;
     private:
+        //==============================================================================
         void invokeChangeIfNeeded(juce::TextEditor &te);
 
-        bool dirty;
+        //==============================================================================
+        const juce::NamedValueSet *props;
         bool controlled;
         // TODO: comment
         bool preventUndoForControlledValue;
+
+        bool dirty;
         // We cannot get maxLength from juce::TextEditor.
         // So we save it here.
         int maxLength;
         juce::String placeholderText;
         juce::Colour placeholderColour;
-        const juce::NamedValueSet *props;
     };
 
     //==============================================================================
@@ -62,10 +67,6 @@ namespace blueprint
     public:
         //==============================================================================
         static inline juce::Identifier valueProp = "value";
-        static inline juce::Identifier placeholderProp = "placeholder";
-        static inline juce::Identifier placeholderColorProp = "placeholder-color";
-        static inline juce::Identifier maxlengthProp = "maxlength";
-        static inline juce::Identifier readonly = "readonly";
 
         static const inline juce::Identifier colorProp = "color";
         static const inline juce::Identifier fontSizeProp = "font-size";
@@ -73,6 +74,11 @@ namespace blueprint
         static const inline juce::Identifier fontFamilyProp = "font-family";
         static const inline juce::Identifier justificationProp = "justification";
         static const inline juce::Identifier kerningFactorProp = "kerning-factor";
+
+        static inline juce::Identifier placeholderProp = "placeholder";
+        static inline juce::Identifier placeholderColorProp = "placeholder-color";
+        static inline juce::Identifier maxlengthProp = "maxlength";
+        static inline juce::Identifier readonly = "readonly";
 
         static const inline juce::Identifier outlineColorProp = "outline-color";
         static const inline juce::Identifier focusedOutlineColorProp = "focused-outline-color";
@@ -85,20 +91,17 @@ namespace blueprint
 
         //==============================================================================
         TextInputView();
-
-        //==============================================================================
         void setProperty(const juce::Identifier &name, const juce::var &value) override;
-
-        //==============================================================================
         void paint(juce::Graphics &g) override;
         void resized() override;
 
     private:
+        //==============================================================================
         juce::Font getFont();
 
         //==============================================================================
         TextInput textInput;
-        bool dirty;
+
         //==============================================================================
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TextInputView)
     };
