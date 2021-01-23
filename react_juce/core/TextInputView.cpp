@@ -122,6 +122,7 @@ namespace blueprint
     {
         addAndMakeVisible(textInput);
         textInput.addListener(&textInput);
+        textInput.setPopupMenuEnabled(false);
     }
 
     void TextInputView::setProperty(const juce::Identifier &name, const juce::var &value)
