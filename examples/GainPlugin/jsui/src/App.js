@@ -161,7 +161,7 @@ const styles = {
     'kerning-factor': 0.5,
   },
   text_input: {
-    backgroundColor: 'ff17ffff',
+    backgroundColor: 'ff303030',
     color: 'ff66FDCF',
     fontSize: 30.0,
     fontFamily: 'Menlo',

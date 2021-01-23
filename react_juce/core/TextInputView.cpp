@@ -165,12 +165,15 @@ namespace blueprint
 
         int just = props.getWithDefault(justificationProp, 1);
         textInput.setJustification(just);
+
+        juce::String hexBackgroundColor = props.getWithDefault(backgroundColorProp, "00000000");
+        juce::Colour backgroundColour = juce::Colour::fromString(hexBackgroundColor);
+        textInput.setColour(juce::TextEditor::ColourIds::backgroundColourId, backgroundColour);
     }
 
     void TextInputView::paint(juce::Graphics &g)
     {
         View::paint(g);
-        g.setColour(juce::Colours::white);
     }
 
     void TextInputView::resized()
