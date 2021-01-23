@@ -28,16 +28,84 @@ namespace blueprint
         }
     }
 
+    void TextInput::insertTextAtCaret(const juce::String &textToInsert)
+    {
+        juce::TextEditor::insertTextAtCaret(textToInsert);
+
+        if ((*props).contains(TextInputView::onInputProp) && (*props)[TextInputView::onInputProp].isMethod())
+        {
+            std::array<juce::var, 1> args{{detail::makeInputEventObject(getText())}};
+            juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
+            std::invoke((*props)[TextInputView::onInputProp].getNativeFunction(), nfArgs);
+        }
+        dirty = true;
+
+        if (controlled)
+        {
+            undo();
+        }
+    }
+
+    //==============================================================================
+    void TextInput::textEditorTextChanged(juce::TextEditor &)
+    {
+    }
+
+    void TextInput::textEditorReturnKeyPressed(juce::TextEditor &te)
+    {
+        invokeChangeIfNeeded(te);
+    }
+
+    // NOTE: JavaScript's change event is not invoked when Esc is pressed.
+    //       This behavior is react-juce specific.
+    void TextInput::textEditorEscapeKeyPressed(juce::TextEditor &te)
+    {
+        invokeChangeIfNeeded(te);
+    }
+
+    void TextInput::textEditorFocusLost(juce::TextEditor &te)
+    {
+
+        invokeChangeIfNeeded(te);
+    }
+
+    void TextInput::invokeChangeIfNeeded(juce::TextEditor &te)
+    {
+        if (dirty)
+        {
+            if ((*props).contains(TextInputView::onChangeProp) && (*props)[TextInputView::onChangeProp].isMethod())
+            {
+                std::array<juce::var, 1> args{{detail::makeChangeEventObject(te.getText())}};
+                juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
+                std::invoke((*props)[TextInputView::onChangeProp].getNativeFunction(), nfArgs);
+            }
+            dirty = false;
+        }
+    }
+
+    //==============================================================================
+
     TextInputView::TextInputView()
-        : textInput(), placeholderText(), placeholderColour(juce::Colours::black), dirty(false)
+        : textInput(&props),
+          placeholderText(),
+          placeholderColour(juce::Colours::black),
+          dirty(false)
     {
         addAndMakeVisible(textInput);
-        textInput.addListener(this);
+        textInput.addListener(&textInput);
     }
 
     void TextInputView::setProperty(const juce::Identifier &name, const juce::var &value)
     {
         View::setProperty(name, value);
+        if (name == valueProp)
+        {
+          if (!value.isString())
+            throw std::invalid_argument("Invalid prop value. Prop \'value\' must be a string.");
+          textInput.setControlled(true);
+          textInput.setControlledValue(value);
+          textInput.setText(value);
+        }
         if (name == placeholderProp)
         {
             setPlaceholderText(value);
@@ -83,35 +151,6 @@ namespace blueprint
         textInput.setBounds(0, 0, getWidth(), getHeight());
     }
 
-    void TextInputView::textEditorTextChanged(juce::TextEditor &te)
-    {
-        if (props.contains(onInputProp) && props[onInputProp].isMethod())
-        {
-            std::array<juce::var, 1> args{{detail::makeInputEventObject(te.getText())}};
-            juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
-            std::invoke(props[onInputProp].getNativeFunction(), nfArgs);
-        }
-        dirty = true;
-    }
-
-    void TextInputView::textEditorReturnKeyPressed(juce::TextEditor &te)
-    {
-        invokeChangeIfNeeded(te);
-    }
-
-    // NOTE: JavaScript's change event is not invoked when Esc is pressed.
-    //       This behavior is react-juce specific.
-    void TextInputView::textEditorEscapeKeyPressed(juce::TextEditor &te)
-    {
-        invokeChangeIfNeeded(te);
-    }
-
-    void TextInputView::textEditorFocusLost(juce::TextEditor &te)
-    {
-
-        invokeChangeIfNeeded(te);
-    }
-
     // TODO: It was copied from TextView.h
     juce::Font TextInputView::getFont()
     {
@@ -136,19 +175,5 @@ namespace blueprint
     {
         placeholderColour = colourToUse;
         textInput.setTextToShowWhenEmpty(placeholderText, placeholderColour);
-    }
-
-    void TextInputView::invokeChangeIfNeeded(juce::TextEditor &te)
-    {
-        if (dirty)
-        {
-            if (props.contains(onChangeProp) && props[onChangeProp].isMethod())
-            {
-                std::array<juce::var, 1> args{{detail::makeChangeEventObject(te.getText())}};
-                juce::var::NativeFunctionArgs nfArgs(juce::var(), args.data(), static_cast<int>(args.size()));
-                std::invoke(props[onChangeProp].getNativeFunction(), nfArgs);
-            }
-            dirty = false;
-        }
     }
 }

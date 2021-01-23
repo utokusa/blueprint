@@ -13,15 +13,37 @@ Created: 2021/01/20 22:30:35
 
 namespace blueprint
 {
+    //==============================================================================
+    class TextInput : public juce::TextEditor, public juce::TextEditor::Listener
+    {
+    public:
+        TextInput(const juce::NamedValueSet *props) : props(props), controlled(false), controlledValue() {}
+        void insertTextAtCaret(const juce::String &textToInsert) override;
+        void setControlled(bool _controlled) { controlled = _controlled; }
+        void setControlledValue(const juce::String &value) { controlledValue = value; }
+
+        //==============================================================================
+        void textEditorTextChanged(juce::TextEditor &te) override;
+        void textEditorReturnKeyPressed(juce::TextEditor &te) override;
+        void textEditorEscapeKeyPressed(juce::TextEditor &te) override;
+        void textEditorFocusLost(juce::TextEditor &te) override;
+    private:
+        void invokeChangeIfNeeded(juce::TextEditor &te);
+        bool dirty;
+        bool controlled;
+        juce::String controlledValue;
+        const juce::NamedValueSet *props;
+    };
 
     //==============================================================================
     /** The TextInputView class
  *  TODO: comment
  */
-    class TextInputView : public View, juce::TextEditor::Listener
+    class TextInputView : public View
     {
     public:
         //==============================================================================
+        static inline juce::Identifier valueProp = "value";
         static inline juce::Identifier placeholderProp = "placeholder";
         static inline juce::Identifier placeholderColorProp = "placeholder-color";
         static inline juce::Identifier maxlengthProp = "maxlength";
@@ -47,20 +69,16 @@ namespace blueprint
         void paint(juce::Graphics &g);
         void resized() override;
 
-        //==============================================================================
-        void textEditorTextChanged(juce::TextEditor &te) override;
-        void textEditorReturnKeyPressed(juce::TextEditor &te) override;
-        void textEditorEscapeKeyPressed(juce::TextEditor &te) override;
-        void textEditorFocusLost(juce::TextEditor &te) override;
+
 
     private:
         juce::Font getFont();
         void setPlaceholderText(const juce::String &text);
         void setPlaceholderColour(const juce::Colour &colourToUse);
-        void invokeChangeIfNeeded(juce::TextEditor &te);
+
 
         //==============================================================================
-        juce::TextEditor textInput;
+        TextInput textInput;
         juce::String placeholderText;
         juce::Colour placeholderColour;
         bool dirty;

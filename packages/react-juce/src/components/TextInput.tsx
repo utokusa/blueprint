@@ -9,6 +9,7 @@ export interface ChangeEvent {
 }
 
 export interface TextInputProps {
+  value?: string,
   placeholder?: string,
   'placeholder-color'?: string,
   maxlength?: number,

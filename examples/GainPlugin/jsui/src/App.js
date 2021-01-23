@@ -32,13 +32,25 @@ class App extends Component {
   constructor(props) {
     console.log("construct App...");
     super(props);
+    this._onChange = this._onChange.bind(this);
     this._onMuteToggled = this._onMuteToggled.bind(this);
 
     this.state = {
+      textValue: 'text',
       muted: false
     }
   }
 
+  _onChange(event) {
+    console.log("_onChange");
+    console.log(event.value);
+    let newStr = ""
+    for (let i = 0; i < event.value.length; i++) {
+      if (event.value.length > 1 && i === 0) continue;
+      newStr = newStr + event.value[i];
+    }
+    this.setState({textValue:newStr});
+  }
   _onMuteToggled(toggled) {
     this.setState({
       muted: toggled
@@ -64,10 +76,13 @@ class App extends Component {
         <View {...styles.content}>
           <Image source={require('./logo.png')} {...styles.logo} />
           <TextInput
+            // value="text"
+            value={this.state.textValue}
             placeholder="init"
             maxlength={20}
-            onInput={(e) => console.log(`App.js onInput: ${e.value}`)}
-            onChange={(e) => console.log(`App.js onChange: ${e.value}`)}
+            // onInput={(e) => console.log(`App.js onInput: ${e.value}`)}
+            // onChange={(e) => console.log(`App.js onChange: ${e.value}`)}
+            onInput={this._onChange}
             // readonly
             {...styles.text_input}
           />
