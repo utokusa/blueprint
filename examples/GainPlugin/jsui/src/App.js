@@ -32,7 +32,7 @@ class App extends Component {
   constructor(props) {
     console.log("construct App...");
     super(props);
-    this._onChange = this._onChange.bind(this);
+    this._onInput = this._onInput.bind(this);
     this._onMuteToggled = this._onMuteToggled.bind(this);
 
     this.state = {
@@ -41,15 +41,9 @@ class App extends Component {
     }
   }
 
-  _onChange(event) {
-    console.log("_onChange");
-    console.log(event.value);
-    let newStr = ""
-    for (let i = 0; i < event.value.length; i++) {
-      if (event.value.length > 1 && i === 0) continue;
-      newStr = newStr + event.value[i];
-    }
-    this.setState({textValue:newStr});
+  _onInput(event) {
+    console.log(`onInput: ${event.value}`);
+    this.setState({textValue: event.value});
   }
   _onMuteToggled(toggled) {
     this.setState({
@@ -79,10 +73,10 @@ class App extends Component {
             // value="text"
             value={this.state.textValue}
             placeholder="init"
-            maxlength={20}
+            maxlength={5}
             // onInput={(e) => console.log(`App.js onInput: ${e.value}`)}
-            // onChange={(e) => console.log(`App.js onChange: ${e.value}`)}
-            onInput={this._onChange}
+            onInput={this._onInput}
+            onChange={(e) => console.log(`App.js onChange: ${e.value}`)}
             // readonly
             {...styles.text_input}
           />

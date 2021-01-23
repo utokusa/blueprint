@@ -28,9 +28,27 @@ namespace blueprint
         }
     }
 
+    void TextInput::setControlledValue(const juce::String &value)
+    {
+        preventUndoForControlledValue = true;
+        setText(value);
+    }
+
+    void TextInput::setMaxLength(const int maxLen)
+    {
+        maxLength = maxLen;
+        setInputRestrictions(maxLen);
+    }
+
     void TextInput::insertTextAtCaret(const juce::String &textToInsert)
     {
+        juce::String currentValue = getText();
         juce::TextEditor::insertTextAtCaret(textToInsert);
+        juce::String newValue = getText();
+        if (currentValue == newValue)
+        {
+            return;
+        }
 
         if ((*props).contains(TextInputView::onInputProp) && (*props)[TextInputView::onInputProp].isMethod())
         {
@@ -40,10 +58,11 @@ namespace blueprint
         }
         dirty = true;
 
-        if (controlled)
+        if (controlled && !preventUndoForControlledValue)
         {
             undo();
         }
+        preventUndoForControlledValue = false;
     }
 
     //==============================================================================
@@ -100,11 +119,10 @@ namespace blueprint
         View::setProperty(name, value);
         if (name == valueProp)
         {
-          if (!value.isString())
-            throw std::invalid_argument("Invalid prop value. Prop \'value\' must be a string.");
-          textInput.setControlled(true);
-          textInput.setControlledValue(value);
-          textInput.setText(value);
+            if (!value.isString())
+                throw std::invalid_argument("Invalid prop value. Prop \'value\' must be a string.");
+            textInput.setControlled(true);
+            textInput.setControlledValue(value);
         }
         if (name == placeholderProp)
         {
@@ -122,7 +140,7 @@ namespace blueprint
         {
             if (!props[maxlengthProp].isDouble())
               throw std::invalid_argument("Invalid prop value. Prop \'maxlength\' must be a number.");
-            textInput.setInputRestrictions(value);
+            textInput.setMaxLength(value);
         }
         if (name == readonly)
         {
