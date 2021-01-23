@@ -28,6 +28,18 @@ function animatedDraw(ctx) {
   ctx.fillRect(0, 0, width, 2);
 }
 
+// Example of callback for image onLoad/onError
+function imageLoaded()
+{
+    console.log("Image is loaded!");
+}
+
+function imageError(error)
+{
+    console.log(error.name);
+    console.log(error.message);
+}
+
 class App extends Component {
   constructor(props) {
     console.log("construct App...");
@@ -64,6 +76,10 @@ class App extends Component {
 
     const sliderFillColor = 'ff66FDCF';
     const sliderTrackColor = 'ff626262';
+
+    const logo_url = "https://raw.githubusercontent.com/nick-thompson/blueprint/master/examples/GainPlugin/jsui/src/logo.png";
+    //const logo_png = require('./logo.png');
+    //const logo_svg = require('./logo.svg');
 
     return (
       <View {...styles.container}>
@@ -142,6 +158,7 @@ const styles = {
     alignItems: 'center',
     borderRadius: 5.0,
     borderWidth: 2.0,
+    borderColor: 'ff66FDCF',
     marginTop: 10,
     minWidth: 30.0,
     minHeight: 30.0,

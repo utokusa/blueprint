@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    blueprint_ReactApplicationRoot.cpp
+    ReactApplicationRoot.cpp
     Created: 9 Dec 2018 10:20:37am
 
   ==============================================================================
@@ -198,6 +198,11 @@ namespace blueprint
         addMethodBinding<2>(ns, "removeChild", &ReactApplicationRoot::removeChild);
         addMethodBinding<0>(ns, "getRootInstanceId", &ReactApplicationRoot::getRootInstanceId);
         addMethodBinding<0>(ns, "resetAfterCommit", &ReactApplicationRoot::resetAfterCommit);
+    }
+
+    juce::ThreadPool&  ReactApplicationRoot::getThreadPool()
+    {
+        return threadPool;
     }
 
 }

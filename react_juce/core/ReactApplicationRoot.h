@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    blueprint_ReactApplicationRoot.h
+    ReactApplicationRoot.h
     Created: 9 Dec 2018 10:20:37am
 
   ==============================================================================
@@ -126,6 +126,11 @@ namespace blueprint
          */
         void bindNativeRenderingHooks();
 
+        /**
+         * 
+         */
+        juce::ThreadPool& getThreadPool();
+
     private:
         //==============================================================================
         template <int NumParams, typename MethodType>
@@ -158,6 +163,9 @@ namespace blueprint
 
         //==============================================================================
         ViewManager viewManager;
+
+        // This will be used by components to asynchronously download content from an web url.
+        juce::ThreadPool threadPool;
 
         std::shared_ptr<EcmascriptEngine>       engine;
         std::unique_ptr<juce::AttributedString> errorText;

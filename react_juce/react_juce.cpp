@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    blueprint.cpp
+    react_juce.cpp
     Created: 26 Nov 2018 3:19:03pm
 
   ==============================================================================
@@ -88,3 +88,4 @@
 #include "core/View.cpp"
 #include "core/ViewManager.cpp"
 #include "core/ScrollView.cpp"
+#include "core/ImageView.cpp"
