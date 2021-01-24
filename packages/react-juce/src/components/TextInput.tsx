@@ -10,6 +10,14 @@ export interface ChangeEvent {
 
 export interface TextInputProps {
   value?: string,
+
+  color?: string,
+  fontSize?: number,
+  fontStyle?: number,
+  fontFamily?: string,
+  justification?: number,
+  'kerning-factor'?: number,
+
   placeholder?: string,
   'placeholder-color'?: string,
   maxlength?: number,
