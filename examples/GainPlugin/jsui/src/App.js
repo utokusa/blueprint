@@ -187,7 +187,7 @@ const styles = {
     'placeholder-color': 'ffaaaaaa',
     'outline-color': '00000000',
     'focused-outline-color': '00000000',
-    'highlighted-color': '80ffffff',
+    'highlight-color': '80ffffff',
     'highlighted-text-color': 'ff000000',
     'caret-color': 'ffffffff',
     height: 50,

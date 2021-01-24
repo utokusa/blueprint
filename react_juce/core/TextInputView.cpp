@@ -192,7 +192,7 @@ namespace blueprint
         if (name == highlightColorProp)
         {
             if (!value.isString())
-                throw std::invalid_argument("Invalid prop value. Prop \'highlighted-color\' must be a color string.");
+                throw std::invalid_argument("Invalid prop value. Prop \'highlight-color\' must be a color string.");
             juce::String hexHighlightColor = value;
             juce::Colour highlightColor = juce::Colour::fromString(hexHighlightColor);
             textInput.setColour(juce::TextEditor::ColourIds::highlightColourId, highlightColor);

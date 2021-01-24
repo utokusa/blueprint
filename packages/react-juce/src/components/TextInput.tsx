@@ -25,7 +25,7 @@ export interface TextInputProps {
   'outline-color'?: string,
   'focused-outline-color'?: string,
   'highlighted-text-color'?: string,
-  'highlighted-color'?: string,
+  'highlight-color'?: string,
   'caret-color'?: string,
 
   onChange?: (e: ChangeEvent) => void,

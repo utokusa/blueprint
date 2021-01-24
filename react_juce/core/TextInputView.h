@@ -92,7 +92,7 @@ namespace blueprint
         static const inline juce::Identifier outlineColorProp = "outline-color";
         static const inline juce::Identifier focusedOutlineColorProp = "focused-outline-color";
         static const inline juce::Identifier highlightedTextColorProp = "highlighted-text-color";
-        static const inline juce::Identifier highlightColorProp = "highlighted-color";
+        static const inline juce::Identifier highlightColorProp = "highlight-color";
         static const inline juce::Identifier caretColorProp = "caret-color";
 
         static inline juce::Identifier onInputProp = "onInput";
