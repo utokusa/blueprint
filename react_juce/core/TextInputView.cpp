@@ -161,14 +161,7 @@ namespace blueprint
         const int just = props.getWithDefault(justificationProp, 1);
         textInput.setJustification(just);
 
-        for (const auto &[textEditorProp, hexDefaultColor]: defaultHexColorByTextEditorProp)
-        {
-            juce::String hexTextEditorColor = props.getWithDefault(textEditorProp, hexDefaultColor);
-            juce::Colour textEditorColor = juce::Colour::fromString(hexTextEditorColor);
-            textInput.setColour(textEditorColourIdsByProp.at(textEditorProp), textEditorColor);
-        }
-
-        if (isTextEditorColorProp(name) && !hasDefaultColor(name))
+        if (isTextEditorColorProp(name))
             setTextEditorColorProp(name, value);
     }
 
@@ -187,13 +180,6 @@ namespace blueprint
     {
         auto it = textEditorColourIdsByProp.find(textEditorColorProp);
         bool found = (it != textEditorColourIdsByProp.end());
-        return found;
-    }
-
-    bool TextInputView::hasDefaultColor(const juce::Identifier &textEditorColorProp)
-    {
-        auto it = defaultHexColorByTextEditorProp.find(textEditorColorProp);
-        bool found = (it != defaultHexColorByTextEditorProp.end());
         return found;
     }
 
@@ -217,9 +203,5 @@ namespace blueprint
         { highlightedTextColorProp, juce::TextEditor::ColourIds::highlightedTextColourId },
         { highlightColorProp,       juce::TextEditor::ColourIds::highlightColourId },
         { caretColorProp,           juce::CaretComponent::ColourIds::caretColourId }
-    };
-
-    const std::map<juce::Identifier, juce::String> TextInputView::defaultHexColorByTextEditorProp = {
-        { backgroundColorProp, "00000000" }
     };
 }
