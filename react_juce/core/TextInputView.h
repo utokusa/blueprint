@@ -38,7 +38,8 @@ namespace blueprint
          *
          * - Allow to set 'placeholder' text and 'placeholder-color' separately.
          */
-        class TextInput : public juce::TextEditor, public juce::TextEditor::Listener
+        class TextInput : public juce::TextEditor
+                        , public juce::TextEditor::Listener
         {
         public:
             //==============================================================================
